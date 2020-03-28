@@ -1,0 +1,28 @@
+{
+  "name": "daily-wallpaper",
+  "version": "1.0.0",
+  "description": "Auto fetch Bing wallpaper every day",
+  "main": "index.js",
+  "bin": {
+    "dwp": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avennn/daily-wallpaper.git"
+  },
+  "author": "Javen Leung",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/avennn/daily-wallpaper/issues"
+  },
+  "homepage": "https://github.com/avennn/daily-wallpaper#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "node-schedule": "^1.3.2",
+    "puppeteer": "^2.1.1",
+    "yargs": "^15.3.1"
+  }
+}
