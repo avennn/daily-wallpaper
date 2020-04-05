@@ -20,6 +20,10 @@ const argv = require('yargs')
         describe: '壁纸高度',
         type: 'number',
     })
+    .option('max', {
+        describe: '最多保存多少张图片',
+        type: 'number',
+    })
     .option('mode', {
         describe: '模式',
         type: 'string',
@@ -30,7 +34,7 @@ const argv = require('yargs')
 const appName = 'daily-wallpaper';
 
 function transmitArgvs() {
-    const keys = ['width', 'height', 'mode'];
+    const keys = ['width', 'height', 'max', 'mode'];
     const arr = [];
     keys.forEach(key => {
         if (Object.keys(argv).includes(key)) {

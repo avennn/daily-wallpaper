@@ -4,6 +4,7 @@ const URL = require('url');
 const querystring = require('querystring');
 const puppeteer = require('puppeteer');
 const axios = require('axios');
+const dayjs = require('dayjs');
 const { website, picDir } = require('./config');
 
 // 获取当前时刻的图片信息
@@ -48,42 +49,52 @@ function mkdir(dir) {
     }
 }
 
-function getCurrentDate() {
-    const date = new Date();
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    if (month < 10) {
-        month = '0' + month;
-    }
-    let day = date.getDate();
-    if (day < 10) {
-        day = '0' + day;
-    }
-    return `${year}${month}${day}`;
-}
-
-exports.downloadPicture = async function downloadPicture(queryObj = {}) {
+exports.downloadPicture = async function downloadPicture(options = {}) {
     const { url, name, ext, screen } = await getPictureInfo();
     const { width, height } = screen;
     const params = {
-        w: width,
-        h: height,
-        c: 4, // clip裁剪不留白边
-        ...queryObj,
+        rs: 1,
+        c: 4,
     };
+    params.w = options.width || width;
+    params.h = options.height || height;
     const res = await axios.get(url, {
         params,
         responseType: 'arraybuffer',
     });
     mkdir(picDir);
     try {
-        const dateStr = getCurrentDate();
+        const dateStr = dayjs().format('YYYYMMDD');
         const dest = path.resolve(
             picDir,
             `./${name}.${params.w}_${params.h}.${dateStr}.${ext}`,
         );
         fs.writeFileSync(dest, res.data);
-        console.info(`壁纸下载完成：${dest}`);
+        if (options.max) {
+            const files = fs.readdirSync(picDir);
+            const delPics = files
+                .filter(item => /(jpe?g|png|webp|gif)$/.test(item))
+                .reduce((prevResult, item) => {
+                    if (!prevResult.includes(item)) {
+                        prevResult.push(item);
+                    }
+                    return prevResult;
+                }, [])
+                .sort((a, b) => {
+                    const aList = a.split('.');
+                    const bList = b.split('.');
+                    const aDate = aList[aList.length - 2];
+                    const bDate = bList[bList.length - 2];
+                    return dayjs(bDate) - dayjs(aDate);
+                })
+                .splice(options.max);
+            delPics.forEach(item => {
+                fs.unlinkSync(path.resolve(picDir, item));
+            });
+        }
+        console.info(
+            `[${dayjs().format('YYYY-MM-DD HH:mm:ss')}]壁纸下载完成：${dest}`,
+        );
     } catch (e) {
         console.warn(e);
     }
