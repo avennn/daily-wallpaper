@@ -5,13 +5,13 @@ Auto fetch Bing's wallpaper at regular intervals.
 ## Installation
 
 ```bash
-npm i -g daily-wallpaper
+npm i -g dwp
 ```
 
 or
 
 ```bash
-yarn global add daily-wallpaper
+yarn global add dwp
 ```
 
 ## Usage
