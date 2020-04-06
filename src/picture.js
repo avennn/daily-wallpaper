@@ -49,6 +49,12 @@ function mkdir(dir) {
     }
 }
 
+function getPictureId(name) {
+    const arr = name.split('.');
+    arr.splice(arr.length - 3);
+    return arr.join('.');
+}
+
 exports.downloadPicture = async function downloadPicture(options = {}) {
     const { url, name, ext, screen } = await getPictureInfo();
     const { width, height } = screen;
@@ -75,7 +81,11 @@ exports.downloadPicture = async function downloadPicture(options = {}) {
             const delPics = files
                 .filter(item => /(jpe?g|png|webp|gif)$/.test(item))
                 .reduce((prevResult, item) => {
-                    if (!prevResult.includes(item)) {
+                    if (
+                        !prevResult
+                            .map(prevItem => getPictureId(prevItem))
+                            .includes(getPictureId(item))
+                    ) {
                         prevResult.push(item);
                     }
                     return prevResult;
@@ -96,6 +106,6 @@ exports.downloadPicture = async function downloadPicture(options = {}) {
             `[${dayjs().format('YYYY-MM-DD HH:mm:ss')}]壁纸下载完成：${dest}`,
         );
     } catch (e) {
-        console.warn(e);
+        console.error(e);
     }
 };

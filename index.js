@@ -24,6 +24,10 @@ const argv = require('yargs')
         describe: '最多保存多少张图片',
         type: 'number',
     })
+    .option('interval', {
+        describe: '每隔多久请求一次图片',
+        type: 'string',
+    })
     .option('mode', {
         describe: '模式',
         type: 'string',
@@ -34,13 +38,13 @@ const argv = require('yargs')
 const appName = 'daily-wallpaper';
 
 function transmitArgvs() {
-    const keys = ['width', 'height', 'max', 'mode'];
+    const keys = ['width', 'height', 'max', 'interval', 'mode'];
     const arr = [];
     keys.forEach(key => {
         if (Object.keys(argv).includes(key)) {
             const val = argv[key];
             if (typeof val === 'string') {
-                arr.push(`--${key}"${val}"`);
+                arr.push(`--${key}="${val}"`);
             } else {
                 arr.push(`--${key}=${val}`);
             }
