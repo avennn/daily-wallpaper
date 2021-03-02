@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const schedule = require('node-schedule');
 const argv = require('yargs').argv;
 const dayjs = require('dayjs');
@@ -47,6 +49,18 @@ function parseInterval(val) {
     return '*/12 * * *';
 }
 
+function saveHistoryConfig() {
+    try {
+        fs.writeFileSync(
+            '../history.config.json',
+            JSON.stringify(argv, null, 2),
+        );
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+saveHistoryConfig();
 downloadPicture(params);
 schedule.scheduleJob(parseInterval(interval), () => {
     downloadPicture(params);

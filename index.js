@@ -28,6 +28,10 @@ const argv = require('yargs')
         describe: '每隔多久请求一次图片',
         type: 'string',
     })
+    .option('history', {
+        describe: '是否使用上一次的选项',
+        type: 'boolean',
+    })
     .option('mode', {
         describe: '模式',
         type: 'string',
@@ -38,11 +42,13 @@ const argv = require('yargs')
 const appName = 'daily-wallpaper';
 
 function transmitArgvs() {
+    const history = readHistoryConfig();
+    let config = argv.history ? history : argv;
     const keys = ['width', 'height', 'max', 'interval', 'mode'];
     const arr = [];
-    keys.forEach(key => {
-        if (Object.keys(argv).includes(key)) {
-            const val = argv[key];
+    keys.forEach((key) => {
+        if (Object.keys(config).includes(key)) {
+            const val = config[key];
             if (typeof val === 'string') {
                 arr.push(`--${key}="${val}"`);
             } else {
@@ -62,7 +68,7 @@ function hasPm2Job() {
                     try {
                         const list = JSON.parse(match[1]);
                         const isExist = !!list.find(
-                            item => item.name === appName,
+                            (item) => item.name === appName,
                         );
                         resolve(isExist);
                     } catch (e) {
@@ -142,6 +148,22 @@ async function execute(cmd) {
         }
     } catch (e) {
         console.warn('err', e);
+    }
+}
+
+function readHistoryConfig() {
+    try {
+        const p = './history.config.json';
+        const stats = fs.stat(p);
+        if (stats.isFile()) {
+            const config = fs.readFileSync(p);
+            if (config) {
+                return config;
+            }
+        }
+        return null;
+    } catch (e) {
+        console.error(e);
     }
 }
 
