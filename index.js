@@ -154,7 +154,7 @@ async function execute(cmd) {
 function readHistoryConfig() {
     try {
         const p = './history.config.json';
-        const stats = fs.stat(p);
+        const stats = fs.statSync(p);
         if (stats.isFile()) {
             const config = fs.readFileSync(p);
             if (config) {
