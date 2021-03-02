@@ -154,12 +154,10 @@ async function execute(cmd) {
 function readHistoryConfig() {
     try {
         const p = './history.config.json';
-        const stats = fs.statSync(p);
-        if (stats.isFile()) {
-            const config = fs.readFileSync(p);
-            if (config) {
-                return config;
-            }
+        fs.accessSync(p, fs.constants.F_OK | fs.constants.R_OK);
+        const config = fs.readFileSync(p);
+        if (config) {
+            return config;
         }
         return null;
     } catch (e) {
