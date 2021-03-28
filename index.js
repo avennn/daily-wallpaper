@@ -152,17 +152,15 @@ async function execute(cmd) {
 }
 
 function readHistoryConfig() {
-    try {
-        const p = './history.config.json';
-        fs.accessSync(p, fs.constants.F_OK | fs.constants.R_OK);
-        const config = fs.readFileSync(p);
-        if (config) {
-            return config;
-        }
-        return null;
-    } catch (e) {
-        console.error(e);
+    const p = './history.config.json';
+    if (!fs.existsSync(p)) {
+        fs.writeFileSync(p, '');
     }
+    const config = fs.readFileSync(p);
+    if (config) {
+        return config;
+    }
+    return null;
 }
 
 // 开始运行
