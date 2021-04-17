@@ -6,6 +6,7 @@ const puppeteer = require('puppeteer');
 const axios = require('axios');
 const dayjs = require('dayjs');
 const { website, picDir } = require('./config');
+const screen = require('nc-screen');
 
 // 获取当前时刻的图片信息
 async function getPictureInfo() {
@@ -31,7 +32,6 @@ async function getPictureInfo() {
                 url: picUrl, // example: https://cn.bing.com/th?id=OHR.FormentorHolidays_ZH-CN3392936755_UHD.jpg
                 name: picMatch[1],
                 ext: picMatch[2],
-                screen: screenInfo,
             };
         }
     }
@@ -56,8 +56,8 @@ function getPictureId(name) {
 }
 
 exports.downloadPicture = async function downloadPicture(options = {}) {
-    const { url, name, ext, screen } = await getPictureInfo();
-    const { width, height } = screen;
+    const { url, name, ext } = await getPictureInfo();
+    const { width, height } = screen.getInfo();
     const params = {
         rs: 1,
         c: 4,
@@ -79,11 +79,11 @@ exports.downloadPicture = async function downloadPicture(options = {}) {
         if (options.max) {
             const files = fs.readdirSync(picDir);
             const delPics = files
-                .filter(item => /(jpe?g|png|webp|gif)$/.test(item))
+                .filter((item) => /(jpe?g|png|webp|gif)$/.test(item))
                 .reduce((prevResult, item) => {
                     if (
                         !prevResult
-                            .map(prevItem => getPictureId(prevItem))
+                            .map((prevItem) => getPictureId(prevItem))
                             .includes(getPictureId(item))
                     ) {
                         prevResult.push(item);
@@ -98,7 +98,7 @@ exports.downloadPicture = async function downloadPicture(options = {}) {
                     return dayjs(bDate) - dayjs(aDate);
                 })
                 .splice(options.max);
-            delPics.forEach(item => {
+            delPics.forEach((item) => {
                 fs.unlinkSync(path.resolve(picDir, item));
             });
         }

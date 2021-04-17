@@ -11,6 +11,7 @@ const params = {
     height,
     max,
 };
+console.log('params', params);
 
 function isValidInterval(val) {
     return val && /\d+(s|m|h|d)$/.test(val);
