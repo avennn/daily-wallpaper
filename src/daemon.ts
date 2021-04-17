@@ -1,8 +1,8 @@
-const { execFile } = require('child_process');
+import { execFile } from 'child_process';
 
-exports.isPm2Installed = function isPm2Installed() {
-    return new Promise(resolve => {
-        execFile('pm2', ['-v'], err => {
+export function isPm2Installed() {
+    return new Promise((resolve) => {
+        execFile('pm2', ['-v'], (err) => {
             if (!err) {
                 resolve(true);
             } else {
@@ -10,9 +10,9 @@ exports.isPm2Installed = function isPm2Installed() {
             }
         });
     });
-};
+}
 
-exports.installPm2 = function installPm2() {
+export function installPm2() {
     return new Promise((resolve, reject) => {
         execFile('npm', ['install', '-g', 'pm2'], (err, stdout, stderr) => {
             if (!err) {
@@ -22,4 +22,4 @@ exports.installPm2 = function installPm2() {
             }
         });
     });
-};
+}

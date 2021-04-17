@@ -1,11 +1,17 @@
-const fs = require('fs');
-const path = require('path');
-const schedule = require('node-schedule');
-const argv = require('yargs').argv;
-const dayjs = require('dayjs');
-const { downloadPicture } = require('./picture');
+import fs from 'fs';
+import schedule from 'node-schedule';
+import { argv } from 'yargs';
+import dayjs from 'dayjs';
+import { downloadPicture } from './picture';
 
-const { width, height, max, interval } = argv;
+interface InputParams {
+    width?: number;
+    height?: number;
+    max?: number;
+    interval?: string;
+}
+
+const { width, height, max, interval } = argv as InputParams;
 const params = {
     width,
     height,
@@ -13,28 +19,28 @@ const params = {
 };
 console.log('params', params);
 
-function isValidInterval(val) {
+function isValidInterval(val?: string) {
     return val && /\d+(s|m|h|d)$/.test(val);
 }
 
-function parseInterval(val) {
+function parseInterval(val?: string) {
     if (isValidInterval(val)) {
-        const res = val.match(/(\d+)(s|m|h|d)$/);
-        const num = res[1];
-        if (val.endsWith('s')) {
+        const res = val!.match(/(\d+)(s|m|h|d)$/);
+        const num = Number(res![1]);
+        if (val!.endsWith('s')) {
             // 秒
             return `*/${num} * * * * *`;
-        } else if (val.endsWith('m')) {
+        } else if (val!.endsWith('m')) {
             // 分
             return `*/${num} * * * *`;
-        } else if (val.endsWith('h')) {
+        } else if (val!.endsWith('h')) {
             // 时
             return `*/${num} * * *`;
-        } else if (val.endsWith('d')) {
+        } else if (val!.endsWith('d')) {
             // 天
             const rule = new schedule.RecurrenceRule();
             let day = (dayjs().day() + num) % 7;
-            const dayOfWeek = [];
+            const dayOfWeek: number[] = [];
             while (!dayOfWeek.includes(day)) {
                 dayOfWeek.push(day);
                 day = (day + num) % 7;
@@ -54,7 +60,7 @@ function saveHistoryConfig() {
     try {
         fs.writeFileSync(
             '../history.config.json',
-            JSON.stringify(argv, null, 2),
+            JSON.stringify(argv, null, 2)
         );
     } catch (e) {
         console.error(e);

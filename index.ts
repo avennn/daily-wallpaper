@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-const { execFile } = require('child_process');
-const path = require('path');
-const fs = require('fs');
-const { isPm2Installed, installPm2 } = require('./src/daemon');
+import { execFile } from 'child_process';
+import path from 'path';
+import fs from 'fs';
+import { isPm2Installed, installPm2 } from './src/daemon';
+import * as yargs from 'yargs';
 
-const argv = require('yargs')
+const argv = yargs
     .option('v', {
         alias: 'version',
     })
@@ -68,7 +69,7 @@ function hasPm2Job() {
                     try {
                         const list = JSON.parse(match[1]);
                         const isExist = !!list.find(
-                            (item) => item.name === appName,
+                            (item) => item.name === appName
                         );
                         resolve(isExist);
                     } catch (e) {
@@ -98,11 +99,11 @@ function startPm2Job() {
             ],
             (err, stdout, stderr) => {
                 if (!err) {
-                    resolve();
+                    resolve('');
                 } else {
                     reject(stderr);
                 }
-            },
+            }
         );
     });
 }
@@ -111,7 +112,7 @@ function stopPm2Job() {
     return new Promise((resolve, reject) => {
         execFile('pm2', ['stop', appName], (err, stdout, stderr) => {
             if (!err) {
-                resolve();
+                resolve('');
             } else {
                 reject(stderr);
             }
@@ -123,7 +124,7 @@ function deletePm2Job() {
     return new Promise((resolve, reject) => {
         execFile('pm2', ['delete', appName], (err, stdout, stderr) => {
             if (!err) {
-                resolve();
+                resolve('');
             } else {
                 reject(stderr);
             }
