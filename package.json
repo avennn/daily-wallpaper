@@ -1,6 +1,6 @@
 {
     "name": "dwp",
-    "version": "1.1.2",
+    "version": "1.2.0",
     "description": "Auto fetch Bing's wallpaper at regular intervals",
     "main": "./dist/index.js",
     "engines": {
@@ -12,7 +12,8 @@
     },
     "scripts": {
         "test": "jest",
-        "build": "rm -rf ./dist && tsc"
+        "build": "rm -rf ./dist && tsc",
+        "prepublishOnly": "npm run build"
     },
     "repository": {
         "type": "git",
