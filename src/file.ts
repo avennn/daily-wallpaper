@@ -31,7 +31,7 @@ export function createDirIfNotExist(dirPath: string) {
     }
 }
 
-export function createFileIfNotExist(fPath: string) {
+export function createFileIfNotExist(fPath: string, data: string = '') {
     try {
         const fileExist = fsExistSync(fPath);
         if (fileExist) {
@@ -42,7 +42,7 @@ export function createFileIfNotExist(fPath: string) {
         }
         const dirPath = getFileDir(fPath);
         createDirIfNotExist(dirPath);
-        fs.writeFileSync(fPath, '');
+        fs.writeFileSync(fPath, data);
     } catch (e) {
         logger.error(e);
     }

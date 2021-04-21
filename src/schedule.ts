@@ -3,15 +3,9 @@ import schedule from 'node-schedule';
 import { argv } from 'yargs';
 import dayjs from 'dayjs';
 import { downloadPicture } from './picture';
+import type { FinalParams } from '../typings';
 
-interface InputParams {
-    width?: number;
-    height?: number;
-    max?: number;
-    interval?: string;
-}
-
-const { width, height, max, interval } = argv as InputParams;
+const { width, height, max, interval } = argv as FinalParams;
 const params = {
     width,
     height,
