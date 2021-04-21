@@ -2,7 +2,8 @@ import { execFile } from 'child_process';
 import path from 'path';
 import { appName } from './config';
 import { covertParams, getParams } from './params';
-import type { InputParams, YargsArgv } from '../typings';
+import logger from './logger';
+import type { YargsArgv } from '../typings';
 
 export function isPm2Installed() {
     return new Promise((resolve) => {
@@ -54,6 +55,7 @@ function hasPm2Job() {
 }
 
 function startPm2Job(argv: YargsArgv) {
+    logger.log('startPm2Job\n');
     return new Promise((resolve, reject) => {
         execFile(
             'pm2',

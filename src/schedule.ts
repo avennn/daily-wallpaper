@@ -5,9 +5,11 @@ import dayjs from 'dayjs';
 import { downloadPicture } from './picture';
 import { historyConfig } from './config';
 import { isValidInterval } from './params';
+import { setAutoStartup } from './plist';
+import logger from './logger';
 import type { FinalParams } from '../typings';
 
-const { width, height, max, interval } = argv as FinalParams;
+const { width, height, max, interval, startup } = argv as FinalParams;
 const params = {
     width,
     height,
@@ -68,7 +70,9 @@ function saveHistoryConfig() {
     }
 }
 
+logger.log('schedule\n');
 saveHistoryConfig();
+setAutoStartup(startup);
 downloadPicture(params);
 schedule.scheduleJob(parseInterval(interval), () => {
     downloadPicture(params);

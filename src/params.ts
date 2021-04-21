@@ -28,15 +28,19 @@ export function getHistoryConfig() {
     ) {
         delete result.interval;
     }
+    if (typeof result.startup !== 'boolean') {
+        delete result.startup;
+    }
     return result;
 }
 
 export function getParams(argv: YargsArgv): InputParams {
-    const { width, height, max, interval, history } = argv;
+    const { width, height, max, interval, history, startup } = argv;
     console.log('input argv: ', argv);
     const defaultConfig = {
         max: 1,
         interval: '12h',
+        startup: true,
     };
     const config = {} as InputParams;
     const useHistory = !Object.is(history, false);
@@ -48,6 +52,12 @@ export function getParams(argv: YargsArgv): InputParams {
             max: max || historyConfig.max || defaultConfig.max,
             interval:
                 interval || historyConfig.interval || defaultConfig.interval,
+            startup:
+                typeof startup === 'boolean'
+                    ? startup
+                    : typeof historyConfig.startup === 'boolean'
+                    ? historyConfig.startup
+                    : defaultConfig.startup,
         });
     } else {
         Object.assign(config, {
@@ -55,6 +65,8 @@ export function getParams(argv: YargsArgv): InputParams {
             height,
             max: max || defaultConfig.max,
             interval: interval || defaultConfig.interval,
+            startup:
+                typeof startup === 'boolean' ? startup : defaultConfig.startup,
         });
     }
 
@@ -72,7 +84,7 @@ export function getParams(argv: YargsArgv): InputParams {
 }
 
 export function covertParams(params: InputParams): string[] {
-    const finalKeys = ['width', 'height', 'max', 'interval'];
+    const finalKeys = ['width', 'height', 'max', 'interval', 'startup'];
     const arr: string[] = [];
     Object.keys(params)
         .filter((key) => finalKeys.includes(key))

@@ -3,7 +3,7 @@
 import { execute } from './src/daemon';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { getParams } from './src/params';
+import logger from './src/logger';
 
 const argv = yargs(hideBin(process.argv))
     .option('v', {
@@ -28,8 +28,12 @@ const argv = yargs(hideBin(process.argv))
         describe: '每隔多久请求一次图片',
         type: 'string',
     })
-    .option('no-history', {
-        describe: '如果为真，不使用历史记录',
+    .option('history', {
+        describe: '使用历史记录, --no-history不使用历史记录',
+        type: 'boolean',
+    })
+    .option('startup', {
+        describe: '开机启动, --no-startup不开机启动',
         type: 'boolean',
     })
     .help('help').argv;
@@ -37,7 +41,7 @@ const argv = yargs(hideBin(process.argv))
 // 开始运行
 const cmdList = argv._;
 if (cmdList.length === 1) {
-    console.log(getParams(argv));
+    logger.log('====>', argv, process.env._);
     execute(cmdList[0], argv);
 } else {
     console.error('command line format error');

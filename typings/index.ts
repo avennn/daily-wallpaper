@@ -9,6 +9,7 @@ export interface InputParams extends Record<string, any> {
     height: number;
     max: number;
     interval: string;
+    startup: boolean;
     history: boolean;
 }
 
@@ -20,6 +21,7 @@ export interface YargsArgv {
     max?: number;
     interval?: string;
     history?: boolean;
+    startup?: boolean;
     [key: string]: any;
 }
 
@@ -30,5 +32,6 @@ export interface FinalParams {
     height: number;
     max: number;
     interval: string;
+    startup: boolean;
     [key: string]: unknown;
 }
