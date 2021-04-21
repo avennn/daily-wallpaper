@@ -59,7 +59,7 @@ function startPm2Job(argv: YargsArgv) {
             'pm2',
             [
                 'start',
-                path.resolve(__filename, './schedule.js'),
+                path.resolve(__dirname, './schedule.js'),
                 '--name',
                 appName,
                 '--',

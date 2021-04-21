@@ -3,6 +3,8 @@ import schedule from 'node-schedule';
 import { argv } from 'yargs';
 import dayjs from 'dayjs';
 import { downloadPicture } from './picture';
+import { historyConfig } from './config';
+import { isValidInterval } from './params';
 import type { FinalParams } from '../typings';
 
 const { width, height, max, interval } = argv as FinalParams;
@@ -12,10 +14,6 @@ const params = {
     max,
 };
 console.log('params', params);
-
-function isValidInterval(val?: string) {
-    return val && /\d+(s|m|h|d)$/.test(val);
-}
 
 function parseInterval(val?: string) {
     if (isValidInterval(val)) {
@@ -53,8 +51,17 @@ function parseInterval(val?: string) {
 function saveHistoryConfig() {
     try {
         fs.writeFileSync(
-            '../history.config.json',
-            JSON.stringify(argv, null, 2)
+            historyConfig,
+            JSON.stringify(
+                {
+                    width,
+                    height,
+                    max,
+                    interval,
+                },
+                null,
+                2
+            )
         );
     } catch (e) {
         console.error(e);
