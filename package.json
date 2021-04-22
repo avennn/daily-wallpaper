@@ -15,11 +15,22 @@
         "build": "rm -rf ./dist && tsc",
         "prepublishOnly": "npm run build"
     },
+    "keywords": [
+        "nodejs",
+        "wallpaper",
+        "crawler",
+        "bing",
+        "scheduled-job"
+    ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/avennn/daily-wallpaper.git"
     },
-    "author": "Javen Leung",
+    "author": {
+        "name": "Javen Leung",
+        "email": "914301050@qq.com",
+        "url": "https://github.com/avennn"
+    },
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/avennn/daily-wallpaper/issues"
