@@ -32,17 +32,19 @@ class Logger {
         } catch (e) {}
     }
     handleArgs(...args: any[]) {
-        return args
-            .map((item) => {
-                if (typeof item === 'object' && item) {
-                    return JSON.stringify(item);
-                }
-                return String(item);
-            })
-            .join('');
+        return (
+            args
+                .map((item) => {
+                    if (typeof item === 'object' && item) {
+                        return JSON.stringify(item);
+                    }
+                    return String(item);
+                })
+                .join('') + '\n'
+        );
     }
     baseLog(level: LogLevel, ...args: any[]) {
-        console[level](...args);
+        console[level](...args, '\n');
 
         if (!this.logFileReady) {
             this.init();
