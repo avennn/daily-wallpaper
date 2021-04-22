@@ -4,22 +4,18 @@ Auto fetch Bing's wallpaper at regular intervals.
 
 ## Installation
 
-```bash
-npm i -g dwp
 ```
-
-or
-
-```bash
+npm install -g dwp
+# or
 yarn global add dwp
 ```
 
 ## Usage
 
-For example
+Simplest example
 
 ```bash
-dwp start --width=2880 --height=1800
+dwp start
 ```
 
 You can stop the job by runing this
@@ -52,25 +48,35 @@ pm2 logs
 
 `--width`
 
--   set the width of wallpaper, if not explicit, use screen's width as default.
+-   set the width of wallpaper, if not explicit, use screen's width as default. For example: `--width 1920`, get default value by [nc-screen](https://github.com/avennn/nc-screen).
 
 `--height`
 
--   set the height of wallpaper, if not explicit, use screen's height as default.
+-   set the height of wallpaper, if not explicit, use screen's height as default. For example: `--height 1080`, get default value by [nc-screen](https://github.com/avennn/nc-screen).
 
 `--max`
 
--   set the maximum count of wallpapers keeping in local.
+-   set the maximum count of wallpapers keeping in local. For example: `--max 3`, default: `1`.
 
 `--interval`
 
--   set the interval of fetching wallpaper, every 12 hours as default.
+-   set the interval of fetching wallpaper, every 12 hours as default. For example: `--interval 6h`, default: `12h`.
 
-## Todo List
+`--startup`
 
--   add more fetch modes.
--   support windows system.
--   not depend on nodejs environment.
+-   auto launch after your computer started up.
+
+`--no-startup`
+
+-   not auto launch after your computer started up.
+
+`--history`
+
+-   use last params as input.
+
+`--no-history`
+
+-   not use last params as input.
 
 ## Issues and Contributing
 
