@@ -1,13 +1,13 @@
 # daily-wallpaper
 
-Auto fetch Bing's wallpaper at regular intervals.
+Auto fetch Bing's wallpaper at regular interval.
 
 ## Installation
 
 ```
-npm install -g dwp
+$ npm install -g dwp
 # or
-yarn global add dwp
+$ yarn global add dwp
 ```
 
 ## Usage
@@ -84,7 +84,7 @@ Welcome to publish an issue if you have any question, further more, you can cont
 
 ## Author
 
-[Javen Leung](https://github.com/avennn)，a front-end coder based in ShenZhen.
+[Javen Leung](https://github.com/avennn)
 
 ## License
 
