@@ -4259,6 +4259,11 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
 
+toad-scheduler@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.npmjs.org/toad-scheduler/-/toad-scheduler-1.5.0.tgz#a7a69b1d1a8d1067868b8e76b3af7909bf347346"
+  integrity sha512-jzvrk3gmqHn+twYZTPhdHO2xbLqY3jdhtY/VPQxi/G1VrnwzpWDSHTOHS3x3yFBVNZW3YmUHTGHPfSf2b6iQMg==
+
 tori@^1.3.0:
   version "1.3.0"
   resolved "https://registry.npmjs.org/tori/-/tori-1.3.0.tgz"
