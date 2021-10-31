@@ -5,8 +5,9 @@ import querystring from 'querystring';
 import puppeteer from 'puppeteer';
 import axios from 'axios';
 import dayjs from 'dayjs';
+
 import { website, picDir } from './config';
-import screen from 'nc-screen';
+import { createDirIfNotExist } from './file';
 
 interface PictureInfo {
     url: string;
@@ -21,22 +22,19 @@ interface DownloadOptions {
 }
 
 // 获取当前时刻的图片信息
-async function getPictureInfo(): Promise<PictureInfo | null> {
+export async function getPictureInfo(): Promise<PictureInfo | null> {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto(website, { waitUntil: 'networkidle0' });
     const keyStr = await page.evaluate(
         // @ts-ignore
-        () => document.getElementById('bgImgProgLoad').outerHTML
+        () => document.getElementById('preloadBg').outerHTML
     );
-    const screenInfo = await page.evaluate(() => ({
-        // @ts-ignore
-        width: window.screen.width,
-        // @ts-ignore
-        height: window.screen.height,
-    }));
     await browser.close();
-    const match = keyStr.match(/data-ultra-definition-src="(.+?)&/);
+    if (!keyStr || typeof keyStr !== 'string') {
+        return null;
+    }
+    const match = keyStr.match(/href="(.+?)"/);
     if (match) {
         const picUrl = URL.resolve(website, match[1]);
         const urlObj = URL.parse(picUrl);
@@ -47,23 +45,12 @@ async function getPictureInfo(): Promise<PictureInfo | null> {
         if (picMatch) {
             return {
                 url: picUrl, // example: https://cn.bing.com/th?id=OHR.FormentorHolidays_ZH-CN3392936755_UHD.jpg
-                name: picMatch[1],
+                name: picMatch[1].replace(/\d*x\d*/, 'UHD'),
                 ext: picMatch[2],
             };
         }
     }
     return null;
-}
-
-function mkdir(dir: string) {
-    try {
-        const stats = fs.statSync(dir);
-        if (!stats.isDirectory()) {
-            fs.mkdirSync(dir);
-        }
-    } catch (e) {
-        fs.mkdirSync(dir);
-    }
 }
 
 function getPictureId(name: string) {
@@ -78,18 +65,17 @@ export async function downloadPicture(options: DownloadOptions = {}) {
         return;
     }
     const { url, name, ext } = info;
-    const { width, height } = screen.getInfo();
     const params: any = {
         rs: 1,
         c: 4,
     };
-    params.w = options.width || width;
-    params.h = options.height || height;
+    params.w = options.width;
+    params.h = options.height;
     const res = await axios.get(url, {
         params,
         responseType: 'arraybuffer',
     });
-    mkdir(picDir);
+    createDirIfNotExist(picDir);
     try {
         const dateStr = dayjs().format('YYYYMMDD');
         const dest = path.resolve(

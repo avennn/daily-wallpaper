@@ -5,10 +5,10 @@ const homeDir = os.homedir();
 const platform = os.platform();
 
 function getPictureDirectory() {
-    let dir = path.resolve(homeDir, './Pictures/bing-wallpapers');
+    let dir = path.resolve(homeDir, './Pictures/dwp');
     if (platform === 'win32') {
         // windows
-        dir = path.resolve(homeDir, './Pictures/bing-wallpapers');
+        dir = path.resolve(homeDir, './Pictures/dwp');
     }
     return dir;
 }
@@ -29,3 +29,8 @@ export const historyConfig = path.resolve(
     homeDir,
     './.dwp/history.config.json'
 );
+export const defaultOptions = {
+    interval: '1d',
+    max: 3,
+    startup: true,
+};

@@ -1,7 +1,7 @@
-const { getScreenSize } = require('../src/utils');
+import { getInfo } from 'nc-screen';
 
 test('getScreenSize', () => {
-    const output = getScreenSize();
+    const output = getInfo();
     expect(typeof output).toBe('object');
     expect(output).not.toBeNull();
     expect(typeof output.width).toBe('number');

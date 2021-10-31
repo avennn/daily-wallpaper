@@ -22,12 +22,14 @@ export function createDirIfNotExist(dirPath: string) {
         if (dirExist) {
             const stats = fs.statSync(dirPath);
             if (stats.isDirectory()) {
-                return;
+                return true;
             }
         }
         fs.mkdirSync(dirPath, { recursive: true });
+        return true;
     } catch (e) {
         logger.error(e);
+        return false;
     }
 }
 
@@ -37,14 +39,19 @@ export function createFileIfNotExist(fPath: string, data: string = '') {
         if (fileExist) {
             const stats = fs.statSync(fPath);
             if (stats.isFile()) {
-                return;
+                return true;
             }
         }
         const dirPath = getFileDir(fPath);
-        createDirIfNotExist(dirPath);
+        const created = createDirIfNotExist(dirPath);
+        if (!created) {
+            return false;
+        }
         fs.writeFileSync(fPath, data);
+        return true;
     } catch (e) {
         logger.error(e);
+        return false;
     }
 }
 

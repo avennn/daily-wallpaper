@@ -1,79 +1,73 @@
-import fs from 'fs';
-import schedule from 'node-schedule';
-import { argv } from 'yargs';
-import dayjs from 'dayjs';
+import {
+    ToadScheduler,
+    Task,
+    SimpleIntervalJob,
+    SimpleIntervalSchedule,
+} from 'toad-scheduler';
+import { getInfo } from 'nc-screen';
+import { Command } from 'commander';
+// import fs from 'fs';
+// import dayjs from 'dayjs';
+
+// import { saveHistoryConfig } from './history';
+// import { setAutoStartup } from './plist';
 import { downloadPicture } from './picture';
-import { historyConfig } from './config';
-import { isValidInterval } from './params';
-import { setAutoStartup } from './plist';
-import logger from './logger';
-import type { FinalParams } from '../typings';
+import { parseInterval } from './utils';
+import { defaultOptions } from './config';
+import { createOptionArgs } from './command';
+import type { RawOptions, FinalOptions } from '../types';
 
-const { width, height, max, interval, startup } = argv as FinalParams;
-const params = {
-    width,
-    height,
-    max,
-};
-console.log('params', params);
+function runLeadingSchedule(
+    fn: () => void,
+    interval: SimpleIntervalSchedule
+): ToadScheduler {
+    fn();
+    const scheduler = new ToadScheduler();
 
-function parseInterval(val?: string) {
-    if (isValidInterval(val)) {
-        const res = val!.match(/(\d+)(s|m|h|d)$/);
-        const num = Number(res![1]);
-        if (val!.endsWith('s')) {
-            // 秒
-            return `*/${num} * * * * *`;
-        } else if (val!.endsWith('m')) {
-            // 分
-            return `*/${num} * * * *`;
-        } else if (val!.endsWith('h')) {
-            // 时
-            return `*/${num} * * *`;
-        } else if (val!.endsWith('d')) {
-            // 天
-            const rule = new schedule.RecurrenceRule();
-            let day = (dayjs().day() + num) % 7;
-            const dayOfWeek: number[] = [];
-            while (!dayOfWeek.includes(day)) {
-                dayOfWeek.push(day);
-                day = (day + num) % 7;
-            }
-            rule.dayOfWeek = dayOfWeek;
-            rule.hour = dayjs().hour();
-            rule.minute = dayjs().minute();
-            rule.second = dayjs().second();
-            return rule;
-        }
-    }
-    // 默认每12h获取一次
-    return '*/12 * * *';
+    const task = new Task('dwp', fn);
+    const job = new SimpleIntervalJob(interval, task);
+
+    scheduler.addSimpleIntervalJob(job);
+
+    return scheduler;
 }
 
-function saveHistoryConfig() {
-    try {
-        fs.writeFileSync(
-            historyConfig,
-            JSON.stringify(
-                {
-                    width,
-                    height,
-                    max,
-                    interval,
-                },
-                null,
-                2
-            )
-        );
-    } catch (e) {
-        console.error(e);
+function mergeOptions(options: RawOptions): FinalOptions {
+    const { width, height } = getInfo();
+    const finalOptions = {
+        width,
+        height,
+        ...defaultOptions,
+        ...options,
+    };
+    if (typeof finalOptions.max !== 'number' || finalOptions.max === 0) {
+        finalOptions.max = defaultOptions.max;
     }
+    return finalOptions;
 }
 
-logger.log('schedule\n');
-saveHistoryConfig();
-setAutoStartup(startup);
-downloadPicture(params);
-schedule.scheduleJob(parseInterval(interval), () => {
-    downloadPicture(params);
-});
+export function run(): ToadScheduler {
+    const program = new Command();
+    program
+        .option(...(createOptionArgs('width', true) as [string]))
+        .option(...(createOptionArgs('height', true) as [string]))
+        .option(...(createOptionArgs('interval', true) as [string]))
+        .option(...(createOptionArgs('max', true) as [string]))
+        .option(...(createOptionArgs('startup', true) as [string]))
+        .option(...(createOptionArgs('no-startup', true) as [string]));
+    program.parse();
+    const rawOptions = program.opts() as RawOptions;
+    const { width, height, max, startup, interval } = mergeOptions(rawOptions);
+    // saveHistoryConfig({ width, height, max, interval });
+    // setAutoStartup(startup);
+    return runLeadingSchedule(() => {
+        // fs.writeFileSync(
+        //     './log',
+        //     dayjs().format('YYYY-MM-DD HH:mm:ss') + '\n',
+        //     { flag: 'a' }
+        // );
+        downloadPicture({ width, height, max });
+    }, parseInterval(interval));
+}
+
+run();
