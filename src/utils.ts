@@ -27,3 +27,7 @@ export function parseInterval(interval: string): SimpleIntervalSchedule {
     };
     return { [short2Long[unit]]: digit } as SimpleIntervalSchedule;
 }
+
+export function checkIfDebugMode() {
+    return !!(process.env._ && process.env._.endsWith('ts-node'));
+}

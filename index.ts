@@ -2,11 +2,8 @@
 
 import fs from 'fs';
 import path from 'path';
-import { Command, InvalidArgumentError } from 'commander';
+import { Command } from 'commander';
 import { safeJsonParse } from 'tori';
-import chalk from 'chalk';
-import { defaultOptions } from './src/config';
-import { isValidInterval } from './src/utils';
 import { start } from './src/index';
 import { createOptionArgs } from './src/command';
 

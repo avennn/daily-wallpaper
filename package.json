@@ -1,6 +1,6 @@
 {
     "name": "dwp",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "description": "Auto fetch Bing's wallpaper at regular interval",
     "main": "./dist/index.js",
     "engines": {
@@ -15,7 +15,7 @@
         "build": "rm -rf ./dist && tsc",
         "prepublishOnly": "npm run build",
         "help": "npx ts-node index.ts -h",
-        "debug": "npx ts-node index.ts start -i 5s -m 3 -d"
+        "debug": "npx ts-node index.ts start -i 5s -d"
     },
     "keywords": [
         "nodejs",
@@ -45,6 +45,7 @@
         "chalk": "^4.1.2",
         "commander": "^8.2.0",
         "dayjs": "^1.8.23",
+        "log4js": "^6.3.0",
         "nc-screen": "^1.4.0",
         "plist": "^3.0.2",
         "puppeteer": "^2.1.1",

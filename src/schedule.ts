@@ -12,10 +12,11 @@ import { Command } from 'commander';
 // import { saveHistoryConfig } from './history';
 // import { setAutoStartup } from './plist';
 import { downloadPicture } from './picture';
-import { parseInterval } from './utils';
+import { parseInterval, checkIfDebugMode } from './utils';
 import { defaultOptions } from './config';
 import { createOptionArgs } from './command';
 import type { RawOptions, FinalOptions } from '../types';
+import logger from './logger';
 
 function runLeadingSchedule(
     fn: () => void,
@@ -57,16 +58,47 @@ export function run(): ToadScheduler {
         .option(...(createOptionArgs('no-startup', true) as [string]));
     program.parse();
     const rawOptions = program.opts() as RawOptions;
-    const { width, height, max, startup, interval } = mergeOptions(rawOptions);
+    const options = mergeOptions(rawOptions);
+    logger.info('Options: ', JSON.stringify(options, null, 2));
+    const { width, height, max, startup, interval } = options;
+
+    const isDebug = checkIfDebugMode();
+
     // saveHistoryConfig({ width, height, max, interval });
     // setAutoStartup(startup);
-    return runLeadingSchedule(() => {
+    return runLeadingSchedule(async () => {
         // fs.writeFileSync(
         //     './log',
         //     dayjs().format('YYYY-MM-DD HH:mm:ss') + '\n',
         //     { flag: 'a' }
         // );
-        downloadPicture({ width, height, max });
+        const { success, data, errorMsg, errorStack } = await downloadPicture({
+            width,
+            height,
+            max,
+        });
+        if (!isDebug) {
+            try {
+                // FIXME: ts-node has bug: spawn child_process can not send ipc message.
+                process.send!(
+                    success
+                        ? {
+                              success,
+                              options,
+                              destPath: data!.destPath,
+                              originalUrl: data!.originalUrl,
+                          }
+                        : {
+                              success,
+                              options,
+                              errorMsg,
+                              errorStack,
+                          }
+                );
+            } catch (e) {
+                logger.error('Failed to send message to main thread: ', e);
+            }
+        }
     }, parseInterval(interval));
 }
 

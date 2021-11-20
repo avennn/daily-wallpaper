@@ -1,77 +1,23 @@
-import fs from 'fs';
-import { fsExistSync } from './file';
-import { stdErrorLog, stdOutLog } from './config';
+import path from 'path';
+import log4js from 'log4js';
+import { logDir } from './config';
 
-const LogLevelMap = {
-    log: 1,
-    info: 2,
-    warn: 3,
-    error: 4,
-};
+log4js.configure({
+    appenders: {
+        console: { type: 'console' },
+        app: {
+            type: 'file',
+            filename: path.join(logDir, 'dwp.log'),
+            maxLogSize: 5 * 1024 * 1024 /* 5MB */,
+            backups: 5,
+        },
+    },
+    categories: {
+        default: { appenders: ['console'], level: 'debug' },
+        dwp: { appenders: ['app'], level: 'info' },
+    },
+});
 
-type LogLevel = keyof typeof LogLevelMap;
+const logger = log4js.getLogger('dwp');
 
-class Logger {
-    logFileReady: boolean;
-
-    constructor() {
-        this.logFileReady = false;
-        this.init();
-    }
-    init() {
-        this.createLogFile(stdErrorLog);
-        this.createLogFile(stdOutLog);
-        this.logFileReady = true;
-    }
-    createLogFile(fPath: string) {
-        try {
-            const isExist = fsExistSync(fPath);
-            if (!isExist) {
-                fs.writeFileSync(fPath, '');
-            }
-        } catch (e) {}
-    }
-    handleArgs(...args: any[]) {
-        return (
-            args
-                .map((item) => {
-                    if (typeof item === 'object' && item) {
-                        return JSON.stringify(item);
-                    }
-                    return String(item);
-                })
-                .join('') + '\n'
-        );
-    }
-    baseLog(level: LogLevel, ...args: any[]) {
-        console[level](...args, '\n');
-
-        if (!this.logFileReady) {
-            this.init();
-        }
-
-        let logPath = stdOutLog;
-        if (LogLevelMap[level] > LogLevelMap['warn']) {
-            logPath = stdErrorLog;
-        }
-        fs.appendFile(logPath, this.handleArgs(...args), (err) => {
-            if (err) {
-                console.error(err);
-            }
-        });
-    }
-    log(...args: any[]) {
-        this.baseLog('log', ...args);
-    }
-    info(...args: any[]) {
-        this.baseLog('info', ...args);
-    }
-    warn(...args: any[]) {
-        this.baseLog('warn', ...args);
-    }
-    error(...args: any[]) {
-        this.baseLog('error', ...args);
-    }
-}
-
-export default new Logger();
+export default logger;

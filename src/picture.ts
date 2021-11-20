@@ -8,11 +8,22 @@ import dayjs from 'dayjs';
 
 import { website, picDir } from './config';
 import { createDirIfNotExist } from './file';
+import logger from './logger';
 
 interface PictureInfo {
     url: string;
     name: string;
     ext: string;
+}
+
+interface BaseResult {
+    success: boolean;
+    errorMsg: string;
+    errorStack: string;
+}
+
+interface PictureInfoResult extends BaseResult {
+    data?: PictureInfo;
 }
 
 interface DownloadOptions {
@@ -21,36 +32,60 @@ interface DownloadOptions {
     max?: number;
 }
 
+interface DownloadInfo {
+    originalUrl?: string;
+    destPath?: string;
+}
+
+interface DownloadPictureResult extends BaseResult {
+    data?: DownloadInfo;
+}
+
 // 获取当前时刻的图片信息
-export async function getPictureInfo(): Promise<PictureInfo | null> {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(website, { waitUntil: 'networkidle0' });
-    const keyStr = await page.evaluate(
-        // @ts-ignore
-        () => document.getElementById('preloadBg').outerHTML
-    );
-    await browser.close();
-    if (!keyStr || typeof keyStr !== 'string') {
-        return null;
-    }
-    const match = keyStr.match(/href="(.+?)"/);
-    if (match) {
-        const picUrl = URL.resolve(website, match[1]);
-        const urlObj = URL.parse(picUrl);
-        // @ts-ignore
-        const query = querystring.parse(urlObj.query);
-        // @ts-ignore
-        const picMatch = query.id.match(/^(.+)\.(.+?)$/);
-        if (picMatch) {
-            return {
-                url: picUrl, // example: https://cn.bing.com/th?id=OHR.FormentorHolidays_ZH-CN3392936755_UHD.jpg
-                name: picMatch[1].replace(/\d*x\d*/, 'UHD'),
-                ext: picMatch[2],
-            };
+export async function getPictureInfo(): Promise<PictureInfoResult> {
+    try {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.goto(website, { waitUntil: 'networkidle0' });
+        const keyStr = await page.evaluate(
+            // @ts-ignore
+            () => document.getElementById('preloadBg').outerHTML
+        );
+        await browser.close();
+        if (!keyStr || typeof keyStr !== 'string') {
+            throw new Error('Element not exist!');
         }
+        const match = keyStr.match(/href="(.+?)"/);
+        if (match) {
+            const picUrl = URL.resolve(website, match[1]);
+            const urlObj = URL.parse(picUrl);
+            // @ts-ignore
+            const query = querystring.parse(urlObj.query);
+            // @ts-ignore
+            const picMatch = query.id.match(/^(.+)\.(.+?)$/);
+            if (picMatch) {
+                logger.info('Picture url: ', picUrl);
+                return {
+                    success: true,
+                    data: {
+                        url: picUrl, // example: https://cn.bing.com/th?id=OHR.FormentorHolidays_ZH-CN3392936755_UHD.jpg
+                        name: picMatch[1].replace(/\d*x\d*/, 'UHD'),
+                        ext: picMatch[2],
+                    },
+                    errorMsg: '',
+                    errorStack: '',
+                };
+            }
+        }
+        throw new Error('Not Match!');
+    } catch (e: any) {
+        logger.error('Get picture url error:\n', e);
+        return {
+            success: false,
+            errorMsg: e.message,
+            errorStack: '',
+        };
     }
-    return null;
 }
 
 function getPictureId(name: string) {
@@ -59,24 +94,30 @@ function getPictureId(name: string) {
     return arr.join('.');
 }
 
-export async function downloadPicture(options: DownloadOptions = {}) {
-    const info = await getPictureInfo();
-    if (!info) {
-        return;
-    }
-    const { url, name, ext } = info;
-    const params: any = {
-        rs: 1,
-        c: 4,
-    };
-    params.w = options.width;
-    params.h = options.height;
-    const res = await axios.get(url, {
-        params,
-        responseType: 'arraybuffer',
-    });
-    createDirIfNotExist(picDir);
+export async function downloadPicture(
+    options: DownloadOptions = {}
+): Promise<DownloadPictureResult> {
     try {
+        const picResult = await getPictureInfo();
+        if (!picResult.success) {
+            return {
+                success: false,
+                errorMsg: picResult.errorMsg,
+                errorStack: picResult.errorStack,
+            };
+        }
+        const { url, name, ext } = picResult.data!;
+        const params: any = {
+            rs: 1,
+            c: 4,
+        };
+        params.w = options.width;
+        params.h = options.height;
+        const res = await axios.get(url, {
+            params,
+            responseType: 'arraybuffer',
+        });
+        createDirIfNotExist(picDir);
         const dateStr = dayjs().format('YYYYMMDD');
         const dest = path.resolve(
             picDir,
@@ -110,10 +151,22 @@ export async function downloadPicture(options: DownloadOptions = {}) {
                 fs.unlinkSync(path.resolve(picDir, item));
             });
         }
-        console.info(
-            `[${dayjs().format('YYYY-MM-DD HH:mm:ss')}]壁纸下载完成：${dest}`
-        );
-    } catch (e) {
-        console.error(e);
+        logger.info('Download success: ', dest);
+        return {
+            success: true,
+            data: {
+                originalUrl: url,
+                destPath: dest,
+            },
+            errorMsg: '',
+            errorStack: '',
+        };
+    } catch (e: any) {
+        logger.error('Download fail: ', e);
+        return {
+            success: false,
+            errorMsg: e.message,
+            errorStack: e.stack,
+        };
     }
 }
