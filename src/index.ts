@@ -1,26 +1,50 @@
 import { spawn } from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
+import shell from 'shelljs';
+import ps from 'ps-node';
 import { RawOptions } from '../types/index';
 import logger from './logger';
 import { checkIfDebugMode } from './utils';
+
+function findRunningTasks(): Promise<ps.Program[]> {
+    return new Promise((resolve, reject) => {
+        ps.lookup({ command: 'node', ppid: 1 }, (err, resultList) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            const isDebug = checkIfDebugMode();
+            const matchPath = `${
+                isDebug ? 'daily-wallpaper' : 'dwp'
+            }/dist/src/schedule.js`;
+            const runningTasks = resultList.filter((item) => {
+                if (item.arguments) {
+                    const p = item.arguments[0];
+                    if (~p.indexOf(matchPath)) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            resolve(runningTasks);
+        });
+    });
+}
 
 export function start(rawOptions: RawOptions & { debug: boolean }) {
     logger.info(
         'Start with input options:\n',
         JSON.stringify(rawOptions, null, 2)
     );
+
     const isDebug = checkIfDebugMode();
-    const startPath = path.join(
-        __dirname,
-        `./schedule.${isDebug ? 'ts' : 'js'}`
-    );
+    const startPath = path.join(__dirname, './schedule.js');
+
     logger.info('isDebug: ', isDebug);
     logger.info('Schedule file path: ', startPath);
-    // exec(`npx ts-node ${startPath}`, (err, stdout, stderr) => {
-    //     console.log(err, stdout);
-    // });
-    const args = isDebug ? ['ts-node', startPath] : [startPath];
+
+    const args = [startPath];
     Object.keys(rawOptions).forEach((key) => {
         if (key !== 'debug') {
             const val = rawOptions[key as keyof RawOptions];
@@ -31,7 +55,7 @@ export function start(rawOptions: RawOptions & { debug: boolean }) {
             }
         }
     });
-    const subProcess = spawn(isDebug ? 'npx' : 'node', args, {
+    const subProcess = spawn('node', args, {
         detached: true,
         stdio: [null, null, null, 'ipc'],
     });
@@ -70,4 +94,31 @@ export function start(rawOptions: RawOptions & { debug: boolean }) {
         }
         process.exit(0);
     });
+}
+
+export async function stop() {
+    try {
+        const tasks = await findRunningTasks();
+        const size = tasks.length;
+        if (!size) {
+            console.log('no runing tasks');
+            return;
+        }
+        let count = 0;
+        tasks.forEach((task) => {
+            ps.kill(task.pid, { signal: 'SIGKILL', timeout: 10 }, (err) => {
+                if (err) {
+                    console.log('kill fail', chalk.red(err));
+                } else {
+                    count++;
+                    if (count === tasks.length) {
+                        console.log(chalk.green('Stop successfully!'));
+                    }
+                }
+            });
+        });
+    } catch (e) {
+        console.log('\u274c', chalk.red('Stop failed!'), '\n', chalk.red(e));
+        logger.error('Stop failed!\n', e);
+    }
 }

@@ -29,5 +29,5 @@ export function parseInterval(interval: string): SimpleIntervalSchedule {
 }
 
 export function checkIfDebugMode() {
-    return !__dirname.match(/(dwp|daily-wallpaper)[\\/]dist/);
+    return !__dirname.match(/dwp[\\/]dist/);
 }

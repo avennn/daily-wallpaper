@@ -62,7 +62,7 @@ export function run(): ToadScheduler {
     logger.info('Options: ', JSON.stringify(options, null, 2));
     const { width, height, max, startup, interval } = options;
 
-    const isDebug = checkIfDebugMode();
+    let inited = false;
 
     // saveHistoryConfig({ width, height, max, interval });
     // setAutoStartup(startup);
@@ -77,9 +77,8 @@ export function run(): ToadScheduler {
             height,
             max,
         });
-        if (!isDebug) {
+        if (!inited) {
             try {
-                // FIXME: ts-node has bug: spawn child_process can not send ipc message.
                 process.send!(
                     success
                         ? {
@@ -97,6 +96,8 @@ export function run(): ToadScheduler {
                 );
             } catch (e) {
                 logger.error('Failed to send message to main thread: ', e);
+            } finally {
+                inited = true;
             }
         }
     }, parseInterval(interval));

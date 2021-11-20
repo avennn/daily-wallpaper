@@ -1,6 +1,6 @@
 {
     "name": "dwp",
-    "version": "2.1.2",
+    "version": "2.2.0",
     "description": "Auto fetch Bing's wallpaper at regular interval",
     "main": "./dist/index.js",
     "engines": {
@@ -14,8 +14,9 @@
         "test": "jest",
         "build": "rm -rf ./dist && tsc",
         "prepublishOnly": "npm run build",
-        "help": "npx ts-node index.ts -h",
-        "debug": "npx ts-node index.ts start -i 5s -d"
+        "help": "npm run build && node ./dist/index.js -h",
+        "debug": "npm run build && node ./dist/index.js start -i 30s",
+        "stop": "npm run build && node ./dist/index.js stop"
     },
     "keywords": [
         "nodejs",
@@ -48,7 +49,9 @@
         "log4js": "^6.3.0",
         "nc-screen": "^1.4.0",
         "plist": "^3.0.2",
+        "ps-node": "^0.1.6",
         "puppeteer": "^2.1.1",
+        "shelljs": "^0.8.4",
         "toad-scheduler": "^1.5.0",
         "tori": "^2.0.0"
     },
@@ -56,7 +59,9 @@
         "@tsconfig/node12": "^1.0.7",
         "@types/jest": "^27.0.2",
         "@types/node": "^12.0.0",
+        "@types/ps-node": "^0.1.1",
         "@types/puppeteer": "^5.4.3",
+        "@types/shelljs": "^0.8.9",
         "@types/xml2js": "^0.4.8",
         "@types/yargs": "^16.0.1",
         "@typescript-eslint/eslint-plugin": "^4.22.0",

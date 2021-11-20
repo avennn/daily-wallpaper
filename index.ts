@@ -4,14 +4,12 @@ import fs from 'fs';
 import path from 'path';
 import { Command } from 'commander';
 import { safeJsonParse } from 'tori';
-import { start } from './src/index';
 import { createOptionArgs } from './src/command';
-import { checkIfDebugMode } from './src/utils';
+import { start, stop } from './src/index';
 
 try {
-    const isDebug = checkIfDebugMode();
     const pkgJsonText = fs.readFileSync(
-        path.join(__dirname, isDebug ? 'package.json' : '../package.json'),
+        path.join(__dirname, '../package.json'),
         {
             encoding: 'utf8',
         }
@@ -48,7 +46,7 @@ try {
         .command('stop')
         .description('stop schedule')
         .action(() => {
-            console.log('stop!');
+            stop();
         });
 
     program.parse();
