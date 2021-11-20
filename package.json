@@ -16,7 +16,8 @@
         "prepublishOnly": "npm run build",
         "help": "npm run build && node ./dist/index.js -h",
         "debug": "npm run build && node ./dist/index.js start -i 30s",
-        "stop": "npm run build && node ./dist/index.js stop"
+        "stop": "npm run build && node ./dist/index.js stop",
+        "showlist": "npm run build && node ./dist/index.js list"
     },
     "keywords": [
         "nodejs",

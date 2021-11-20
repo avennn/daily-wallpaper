@@ -2,14 +2,15 @@ import path from 'path';
 import log4js from 'log4js';
 import { logDir } from './config';
 
-type EchoIconKey = 'success' | 'fail' | 'warn';
+type EchoIconKey = 'success' | 'fail' | 'warn' | 'normal';
 const echoIcons: Record<EchoIconKey, string> = {
     success: '\u2705',
     fail: '\u274c',
-    warn: '\u26a1',
+    warn: '💡',
+    normal: '\u2728',
 };
 export const echo = {} as Record<EchoIconKey, (...args: any[]) => void>;
-(['success', 'fail', 'warn'] as EchoIconKey[]).forEach((status) => {
+(['success', 'fail', 'warn', 'normal'] as EchoIconKey[]).forEach((status) => {
     echo[status] = function (...args: any[]) {
         console.log(echoIcons[status], ...args);
     };

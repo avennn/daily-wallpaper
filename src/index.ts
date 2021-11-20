@@ -16,7 +16,7 @@ function findRunningTasks(): Promise<ps.Program[]> {
             const isDebug = checkIfDebugMode();
             const matchPath = `${
                 isDebug ? 'daily-wallpaper' : 'dwp'
-            }/dist/src/schedule.js`;
+            }/dist/src/task.js`;
             const runningTasks = resultList.filter((item) => {
                 if (item.arguments) {
                     const p = item.arguments[0];
@@ -31,65 +31,105 @@ function findRunningTasks(): Promise<ps.Program[]> {
     });
 }
 
-export function start(rawOptions: RawOptions & { debug: boolean }) {
-    logger.info(
-        'Start with input options:\n',
-        JSON.stringify(rawOptions, null, 2)
-    );
+function psKill(pid: number): Promise<Error | undefined> {
+    return new Promise((resolve) => {
+        ps.kill(pid, { signal: 'SIGKILL', timeout: 10 }, (err) => {
+            resolve(err);
+        });
+    });
+}
 
-    const isDebug = checkIfDebugMode();
-    const startPath = path.join(__dirname, './schedule.js');
+async function killTasks(tasks: ps.Program[]): Promise<[null[], Error[]]> {
+    const errList: Error[] = [];
+    const successList: null[] = [];
+    const resList = await Promise.all(tasks.map((t) => psKill(t.pid)));
+    resList.forEach((item) => {
+        if (item) {
+            errList.push(item);
+            logger.error('Kill tasks failed!');
+        } else {
+            successList.push(null);
+        }
+    });
+    return [successList, errList];
+}
 
-    logger.info('isDebug: ', isDebug);
-    logger.info('Schedule file path: ', startPath);
-
-    const args = [startPath];
-    Object.keys(rawOptions).forEach((key) => {
-        if (key !== 'debug') {
-            const val = rawOptions[key as keyof RawOptions];
-            if (typeof val === 'boolean') {
-                args.push(val ? `--${key}` : `--no-${key}`);
-            } else {
-                args.push(`--${key}=${val}`);
+export async function start(rawOptions: RawOptions & { debug: boolean }) {
+    try {
+        const tasks = await findRunningTasks();
+        if (tasks.length) {
+            echo.warn('You already have running task. Will stop it!');
+            const [, errList] = await killTasks(tasks);
+            if (errList.length) {
+                echo.fail(
+                    'Failed!\n',
+                    errList,
+                    '\nPlease kill process manually and then rerun this command.'
+                );
+                return;
             }
         }
-    });
-    const subProcess = spawn('node', args, {
-        detached: true,
-        stdio: [null, null, null, 'ipc'],
-    });
-    subProcess.on('message', (data) => {
-        const {
-            success,
-            options,
-            originalUrl,
-            destPath,
-            errorMsg,
-            errorStack,
-        } = data;
-        if (success) {
-            echo.success(
-                chalk.green('Download success!'),
-                '\n',
-                `Options: ${JSON.stringify(options, null, 2)}`,
-                '\n',
-                `Picture saved in ${chalk.green(destPath)}`,
-                '\n',
-                `Original url ${chalk.green(originalUrl)}`
-            );
-        } else {
-            echo.fail(
-                chalk.red('Download failed!'),
-                '\n',
-                `Options: ${JSON.stringify(options, null, 2)}`,
-                '\n',
-                chalk.red(errorMsg),
-                '\n',
-                chalk.red(errorStack)
-            );
-        }
-        process.exit(0);
-    });
+        logger.info(
+            'Start with input options:\n',
+            JSON.stringify(rawOptions, null, 2)
+        );
+
+        const isDebug = checkIfDebugMode();
+        const startPath = path.join(__dirname, './schedule.js');
+
+        logger.info('isDebug: ', isDebug);
+        logger.info('Schedule file path: ', startPath);
+
+        const args = [startPath];
+        Object.keys(rawOptions).forEach((key) => {
+            if (key !== 'debug') {
+                const val = rawOptions[key as keyof RawOptions];
+                if (typeof val === 'boolean') {
+                    args.push(val ? `--${key}` : `--no-${key}`);
+                } else {
+                    args.push(`--${key}=${val}`);
+                }
+            }
+        });
+        const subProcess = spawn('node', args, {
+            detached: true,
+            stdio: [null, null, null, 'ipc'],
+        });
+        subProcess.on('message', (data) => {
+            const {
+                success,
+                options,
+                originalUrl,
+                destPath,
+                errorMsg,
+                errorStack,
+            } = data;
+            if (success) {
+                echo.success(
+                    chalk.green('Download success!'),
+                    '\n',
+                    `Options: ${JSON.stringify(options, null, 2)}`,
+                    '\n',
+                    `Picture saved in ${chalk.green(destPath)}`,
+                    '\n',
+                    `Original url ${chalk.green(originalUrl)}`
+                );
+            } else {
+                echo.fail(
+                    chalk.red('Download failed!'),
+                    '\n',
+                    `Options: ${JSON.stringify(options, null, 2)}`,
+                    '\n',
+                    chalk.red(errorMsg),
+                    '\n',
+                    chalk.red(errorStack)
+                );
+            }
+            process.exit(0);
+        });
+    } catch (e) {
+        logger.error('Start error: ', e);
+    }
 }
 
 export async function stop() {
@@ -107,9 +147,9 @@ export async function stop() {
                     echo.fail(`Fail to kill process ${task.pid}`, '\n', err);
                 } else {
                     count++;
-                    echo.success(`Stop process ${task.pid} `);
+                    echo.success(`Killed process ${task.pid} `);
                     if (count === total) {
-                        echo.success('Stop all successfully!');
+                        echo.success('Stop successfully!');
                     }
                 }
             });
@@ -117,5 +157,14 @@ export async function stop() {
     } catch (e) {
         echo.fail(chalk.red('Stop failed!'), '\n', chalk.red(e));
         logger.error('Stop failed!\n', e);
+    }
+}
+
+export async function list() {
+    try {
+        const tasks = await findRunningTasks();
+        echo.normal(tasks);
+    } catch (e) {
+        logger.error('List schedule failed!', e);
     }
 }

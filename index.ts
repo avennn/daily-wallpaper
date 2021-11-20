@@ -5,7 +5,7 @@ import path from 'path';
 import { Command } from 'commander';
 import { safeJsonParse } from 'tori';
 import { createOptionArgs } from './src/command';
-import { start, stop } from './src/index';
+import { start, stop, list } from './src/index';
 
 try {
     const pkgJsonText = fs.readFileSync(
@@ -47,6 +47,12 @@ try {
         .description('stop schedule')
         .action(() => {
             stop();
+        });
+    program
+        .command('list')
+        .description('list schedule')
+        .action(() => {
+            list();
         });
 
     program.parse();
