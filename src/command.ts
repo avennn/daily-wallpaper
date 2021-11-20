@@ -1,8 +1,7 @@
-import { Command, InvalidArgumentError, Option } from 'commander';
+import { InvalidArgumentError } from 'commander';
 import chalk from 'chalk';
 import { defaultOptions } from './config';
 import { isValidInterval } from './utils';
-import { boolean } from 'yargs';
 
 function parseIntArgv(value: string) {
     const parsedValue = parseInt(value, 10);
@@ -42,7 +41,7 @@ export function createOptionArgs(
                 ? ['--interval <string>']
                 : [
                       '-i, --interval <string>',
-                      'interval, number + unit, 1s[1 second], 1min[1 minute], 1h[1 hour], 1d[1 day]',
+                      'interval, number + unit, 1s[1 second], 1m[1 minute], 1h[1 hour], 1d[1 day]',
                       parseIntervalArgv,
                       defaultOptions.interval,
                   ];

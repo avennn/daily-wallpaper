@@ -5,7 +5,7 @@ describe('parseInterval', () => {
         expect(parseInterval('5s')).toHaveProperty('seconds', 5);
     });
     test('parse minute', () => {
-        expect(parseInterval('9min')).toHaveProperty('minutes', 9);
+        expect(parseInterval('9m')).toHaveProperty('minutes', 9);
     });
     test('parse hour', () => {
         expect(parseInterval('3h')).toHaveProperty('hours', 3);

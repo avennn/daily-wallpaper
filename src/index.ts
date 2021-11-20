@@ -2,6 +2,7 @@ import { spawn } from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
 import ps from 'ps-node';
+import Table from 'cli-table3';
 import { RawOptions } from '../types/index';
 import logger, { echo } from './logger';
 import { checkIfDebugMode } from './utils';
@@ -16,7 +17,7 @@ function findRunningTasks(): Promise<ps.Program[]> {
             const isDebug = checkIfDebugMode();
             const matchPath = `${
                 isDebug ? 'daily-wallpaper' : 'dwp'
-            }/dist/src/task.js`;
+            }/dist/src/schedule.js`;
             const runningTasks = resultList.filter((item) => {
                 if (item.arguments) {
                     const p = item.arguments[0];
@@ -58,7 +59,9 @@ export async function start(rawOptions: RawOptions & { debug: boolean }) {
     try {
         const tasks = await findRunningTasks();
         if (tasks.length) {
-            echo.warn('You already have running task. Will stop it!');
+            echo.warn(
+                chalk.yellow('You already have running task. Will stop it!')
+            );
             const [, errList] = await killTasks(tasks);
             if (errList.length) {
                 echo.fail(
@@ -163,7 +166,19 @@ export async function stop() {
 export async function list() {
     try {
         const tasks = await findRunningTasks();
-        echo.normal(tasks);
+        const table = new Table({
+            head: [
+                chalk.cyan('PID'),
+                chalk.cyan('Uptime'),
+                chalk.cyan('Memory'),
+                chalk.cyan('Options'),
+            ],
+        });
+        tasks.forEach((task) => {
+            const { pid, arguments: args } = task;
+            table.push([pid, 0, 0, args[1]]);
+        });
+        console.log(table.toString());
     } catch (e) {
         logger.error('List schedule failed!', e);
     }

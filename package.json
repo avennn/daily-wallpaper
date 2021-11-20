@@ -15,7 +15,7 @@
         "build": "rm -rf ./dist && tsc",
         "prepublishOnly": "npm run build",
         "help": "npm run build && node ./dist/index.js -h",
-        "debug": "npm run build && node ./dist/index.js start -i 30s",
+        "debug": "npm run build && node ./dist/index.js start -i 30m",
         "stop": "npm run build && node ./dist/index.js stop",
         "showlist": "npm run build && node ./dist/index.js list"
     },
@@ -45,6 +45,7 @@
         "@types/plist": "^3.0.2",
         "axios": "^0.23.0",
         "chalk": "^4.1.2",
+        "cli-table3": "^0.6.0",
         "commander": "^8.2.0",
         "dayjs": "^1.8.23",
         "log4js": "^6.3.0",
