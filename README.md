@@ -89,3 +89,7 @@ Welcome to publish an issue if you have any question, further more, you can cont
 ## License
 
 [MIT](./LICENSE)
+
+## problems
+
+https://stackoverflow.com/questions/40317578/yarn-global-command-not-working

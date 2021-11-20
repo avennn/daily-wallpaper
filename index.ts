@@ -6,10 +6,12 @@ import { Command } from 'commander';
 import { safeJsonParse } from 'tori';
 import { start } from './src/index';
 import { createOptionArgs } from './src/command';
+import { checkIfDebugMode } from './src/utils';
 
 try {
+    const isDebug = checkIfDebugMode();
     const pkgJsonText = fs.readFileSync(
-        path.join(process.cwd(), 'package.json'),
+        path.join(__dirname, isDebug ? 'package.json' : '../package.json'),
         {
             encoding: 'utf8',
         }

@@ -29,5 +29,5 @@ export function parseInterval(interval: string): SimpleIntervalSchedule {
 }
 
 export function checkIfDebugMode() {
-    return !!(process.env._ && process.env._.endsWith('ts-node'));
+    return !(__dirname.indexOf('daily-wallpaper/dist') > -1);
 }
