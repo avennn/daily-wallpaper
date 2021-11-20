@@ -2,6 +2,19 @@ import path from 'path';
 import log4js from 'log4js';
 import { logDir } from './config';
 
+type EchoIconKey = 'success' | 'fail' | 'warn';
+const echoIcons: Record<EchoIconKey, string> = {
+    success: '\u2705',
+    fail: '\u274c',
+    warn: '\u26a1',
+};
+export const echo = {} as Record<EchoIconKey, (...args: any[]) => void>;
+(['success', 'fail', 'warn'] as EchoIconKey[]).forEach((status) => {
+    echo[status] = function (...args: any[]) {
+        console.log(echoIcons[status], ...args);
+    };
+});
+
 log4js.configure({
     appenders: {
         console: { type: 'console' },

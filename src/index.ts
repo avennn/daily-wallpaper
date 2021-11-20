@@ -1,10 +1,9 @@
 import { spawn } from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
-import shell from 'shelljs';
 import ps from 'ps-node';
 import { RawOptions } from '../types/index';
-import logger from './logger';
+import logger, { echo } from './logger';
 import { checkIfDebugMode } from './utils';
 
 function findRunningTasks(): Promise<ps.Program[]> {
@@ -68,10 +67,8 @@ export function start(rawOptions: RawOptions & { debug: boolean }) {
             errorMsg,
             errorStack,
         } = data;
-        // success: 2705, fail: 274c
         if (success) {
-            console.log(
-                '\u2705',
+            echo.success(
                 chalk.green('Download success!'),
                 '\n',
                 `Options: ${JSON.stringify(options, null, 2)}`,
@@ -81,8 +78,7 @@ export function start(rawOptions: RawOptions & { debug: boolean }) {
                 `Original url ${chalk.green(originalUrl)}`
             );
         } else {
-            console.log(
-                '\u274c',
+            echo.fail(
                 chalk.red('Download failed!'),
                 '\n',
                 `Options: ${JSON.stringify(options, null, 2)}`,
@@ -99,26 +95,27 @@ export function start(rawOptions: RawOptions & { debug: boolean }) {
 export async function stop() {
     try {
         const tasks = await findRunningTasks();
-        const size = tasks.length;
-        if (!size) {
-            console.log('no runing tasks');
+        const total = tasks.length;
+        if (!total) {
+            echo.warn(chalk.yellow('No running task.'));
             return;
         }
         let count = 0;
         tasks.forEach((task) => {
             ps.kill(task.pid, { signal: 'SIGKILL', timeout: 10 }, (err) => {
                 if (err) {
-                    console.log('kill fail', chalk.red(err));
+                    echo.fail(`Fail to kill process ${task.pid}`, '\n', err);
                 } else {
                     count++;
-                    if (count === tasks.length) {
-                        console.log(chalk.green('Stop successfully!'));
+                    echo.success(`Stop process ${task.pid} `);
+                    if (count === total) {
+                        echo.success('Stop all successfully!');
                     }
                 }
             });
         });
     } catch (e) {
-        console.log('\u274c', chalk.red('Stop failed!'), '\n', chalk.red(e));
+        echo.fail(chalk.red('Stop failed!'), '\n', chalk.red(e));
         logger.error('Stop failed!\n', e);
     }
 }
