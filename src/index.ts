@@ -6,6 +6,7 @@ import Table from 'cli-table3';
 import { RawOptions } from '../types/index';
 import logger, { echo } from './logger';
 import { checkIfDebugMode } from './utils';
+import { getProcessesInfo, ProcessInfo } from './shell';
 
 function findRunningTasks(): Promise<ps.Program[]> {
     return new Promise((resolve, reject) => {
@@ -166,17 +167,32 @@ export async function stop() {
 export async function list() {
     try {
         const tasks = await findRunningTasks();
+        const extraInfos = await getProcessesInfo(
+            tasks.map((t) => String(t.pid))
+        );
         const table = new Table({
             head: [
                 chalk.cyan('PID'),
                 chalk.cyan('Uptime'),
                 chalk.cyan('Memory'),
+                chalk.cyan('CPU%'),
+                chalk.cyan('Memory%'),
                 chalk.cyan('Options'),
             ],
         });
         tasks.forEach((task) => {
             const { pid, arguments: args } = task;
-            table.push([pid, 0, 0, args[1]]);
+            const info =
+                extraInfos.find((item) => item.pid === String(pid)) ||
+                ({} as ProcessInfo);
+            table.push([
+                pid,
+                info.upTime,
+                info.memory,
+                info.cpuPercent,
+                info.memoryPercent,
+                args[1],
+            ]);
         });
         console.log(table.toString());
     } catch (e) {
