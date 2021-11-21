@@ -187,10 +187,10 @@ export async function list() {
                 ({} as ProcessInfo);
             table.push([
                 pid,
-                info.upTime,
-                info.memory,
-                info.cpuPercent,
-                info.memoryPercent,
+                info.upTime || 'unknown',
+                info.memory || 'unknown',
+                info.cpuPercent || 'unknown',
+                info.memoryPercent || 'unknown',
                 args[1],
             ]);
         });

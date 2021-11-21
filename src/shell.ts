@@ -10,8 +10,12 @@ interface ParsePsResult {
 }
 
 export function parsePs(pids: string[]): Promise<ParsePsResult[]> {
-    const isDebug = checkIfDebugMode();
     return new Promise((resolve) => {
+        if (!pids.length) {
+            resolve([]);
+            return;
+        }
+        const isDebug = checkIfDebugMode();
         const colKeys = ['etime', 'pcpu', 'pmem'];
         // TODO: different shell
         exec(
@@ -52,6 +56,10 @@ interface ParseTopResult {
 
 function parseTop(pids: string[]): Promise<ParseTopResult[]> {
     return new Promise((resolve) => {
+        if (!pids.length) {
+            resolve([]);
+            return;
+        }
         const args: string[] = [];
         pids.forEach((pid) => {
             // TODO: different shell
@@ -106,6 +114,9 @@ function parseTop(pids: string[]): Promise<ParseTopResult[]> {
 export interface ProcessInfo extends ParsePsResult, ParseTopResult {}
 
 export async function getProcessesInfo(pids: string[]): Promise<ProcessInfo[]> {
+    if (!pids.length) {
+        return [];
+    }
     const psList = await parsePs(pids);
     const topList = await parseTop(pids);
     const result: ProcessInfo[] = [];
