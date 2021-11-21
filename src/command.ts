@@ -31,28 +31,50 @@ export function createOptionArgs(
         case 'width':
             return isShort
                 ? ['--width <number>']
-                : ['-W, --width <number>', 'width', parseIntArgv];
+                : [
+                      '-W, --width <number>',
+                      "Set wallpaper's width. Not required. Can auto acquire!",
+                      parseIntArgv,
+                  ];
         case 'height':
             return isShort
                 ? ['--height <number>']
-                : ['-H, --height <number>', 'height', parseIntArgv];
+                : [
+                      '-H, --height <number>',
+                      "Set wallpaper's height. Not required. Can auto acquire!",
+                      parseIntArgv,
+                  ];
         case 'interval':
             return isShort
                 ? ['--interval <string>']
                 : [
                       '-i, --interval <string>',
-                      'interval, number + unit, 1s[1 second], 1m[1 minute], 1h[1 hour], 1d[1 day]',
+                      'Interval between fetching wallpaper, with format of [digit][unit], unit supports s(second),m(minute),h(hour),d(day)',
                       parseIntervalArgv,
                       defaultOptions.interval,
                   ];
         case 'max':
             return isShort
                 ? ['--max <number>']
-                : ['-m, --max <number>', 'max', parseIntArgv];
+                : [
+                      '-m, --max <number>',
+                      'Keep latest [max] wallpapers in the dir',
+                      parseIntArgv,
+                  ];
         case 'startup':
-            return isShort ? ['--startup'] : ['-s, --startup', 'startup'];
+            return isShort
+                ? ['--startup']
+                : [
+                      '-s, --startup',
+                      'Whether auto start after your computer launched, default true',
+                  ];
         case 'no-startup':
-            return isShort ? ['--no-startup'] : ['--no-startup', 'no-startup'];
+            return isShort
+                ? ['--no-startup']
+                : [
+                      '--no-startup',
+                      'Not auto start after your computer launched, defaut false',
+                  ];
         default:
             return [];
     }
