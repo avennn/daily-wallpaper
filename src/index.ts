@@ -9,7 +9,7 @@ import { checkIfDebugMode } from './utils';
 
 function findRunningTasks(): Promise<ps.Program[]> {
     return new Promise((resolve, reject) => {
-        ps.lookup({ command: 'node', ppid: 1 }, (err, resultList) => {
+        ps.lookup({ command: 'node' }, (err, resultList) => {
             if (err) {
                 reject(err);
                 return;
