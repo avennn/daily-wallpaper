@@ -53,9 +53,11 @@ dwp list
     Set wallpaper's width. Not required. `width` and `height` would be automatically acquired with [nc-screen](https://github.com/avennn/nc-screen).
 
 -   `-H, --height <number>`
+
     Set wallpaper's height. Not required.
 
 -   `-i, --interval <string>`
+
     Interval between two fetching actions, with format `[digit][unit]`. For example, `1h` means fetching wallpaper per hour. Unit supports `s`(second), `m`(minute), `h`(hour), `d`(day). Default `1d`. Not suggest to set a very small value, otherwise leading problem.
 
 -   `-m, --max <number>`

@@ -50,12 +50,14 @@ dwp list
 
 -   `-W, --width <number>`
 
-    设置壁纸的宽度。非必需。`width`和`height`会通过[nc-screen](https://github.com/avennn/nc-screen)自动获取.
+    设置壁纸的宽度。非必需。`width`和`height`会通过[nc-screen](https://github.com/avennn/nc-screen)自动获取。
 
 -   `-H, --height <number>`
+
     设置壁纸的高度。非必需。
 
 -   `-i, --interval <string>`
+
     两次抓取壁纸的间隔时间，格式是`[digit][unit]`。例如，`1h` 代表 1 小时获取一次. 单位支持`s`(秒), `m`(分), `h`(时), `d`(天).默认 1 天一次。不建议设置太小的值，否则很可能出现 bug。
 
 -   `-m, --max <number>`
