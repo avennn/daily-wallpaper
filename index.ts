@@ -20,7 +20,7 @@ try {
     program.version(version, '-v, --version');
     program
         .command('start')
-        .description('start schedule')
+        .description('Start a cron job.')
         .option(
             ...(createOptionArgs('width') as [string, string, () => number])
         )
@@ -44,13 +44,13 @@ try {
         });
     program
         .command('stop')
-        .description('stop schedule')
+        .description('Stop all cron jobs.')
         .action(() => {
             stop();
         });
     program
         .command('list')
-        .description('list schedule')
+        .description('List all cron jobs in table.')
         .action(() => {
             list();
         });

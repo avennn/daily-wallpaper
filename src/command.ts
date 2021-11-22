@@ -33,7 +33,7 @@ export function createOptionArgs(
                 ? ['--width <number>']
                 : [
                       '-W, --width <number>',
-                      "Set wallpaper's width. Not required. Can auto acquire!",
+                      "Set wallpaper's width. Not required. Can automatically acquire!",
                       parseIntArgv,
                   ];
         case 'height':
@@ -41,7 +41,7 @@ export function createOptionArgs(
                 ? ['--height <number>']
                 : [
                       '-H, --height <number>',
-                      "Set wallpaper's height. Not required. Can auto acquire!",
+                      "Set wallpaper's height. Not required. Can automatically acquire!",
                       parseIntArgv,
                   ];
         case 'interval':
@@ -49,7 +49,7 @@ export function createOptionArgs(
                 ? ['--interval <string>']
                 : [
                       '-i, --interval <string>',
-                      'Interval between fetching wallpaper, with format of [digit][unit], unit supports s(second),m(minute),h(hour),d(day)',
+                      'Interval between two fetching actions, with format of [digit][unit], unit supports s(second),m(minute),h(hour),d(day)',
                       parseIntervalArgv,
                       defaultOptions.interval,
                   ];

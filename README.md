@@ -1,86 +1,75 @@
 # daily-wallpaper
 
-Auto fetch Bing's wallpaper at regular interval.
+Fetch Bing wallpapers regularly
 
 ## Installation
 
+```sh
+npm install -g dwp
 ```
-$ npm install -g dwp
-# or
-$ yarn global add dwp
+
+or
+
+```sh
+yarn global dwp
 ```
 
 ## Usage
 
-Simplest example
+Start a cron job.
 
 ```bash
 dwp start
 ```
 
-You can stop the job by runing this
+Stop all cron jobs.
 
 ```bash
 dwp stop
 ```
 
-To find out whether or not the job is runing, you can run this
+Show cron jobs.
 
-```bash
-pm2 ls
-```
-
-or
-
-```bash
-pm2 logs
+```sh
+dwp list
 ```
 
 ### Options
 
-`-v, --version`
+-   `-v, --version`
 
--   show this package's version.
+    Show current version.
 
-`-h, --help`
+-   `-h, --help`
 
--   show all the options you can use.
+    Show help info.
 
-`--width`
+### Options for `start` command
 
--   set the width of wallpaper, if not explicit, use screen's width as default. For example: `--width 1920`, get default value by [nc-screen](https://github.com/avennn/nc-screen).
+-   `-W, --width <number>`
 
-`--height`
+    Set wallpaper's width. Not required. `width` and `height` would be automatically acquired with [nc-screen](https://github.com/avennn/nc-screen).
 
--   set the height of wallpaper, if not explicit, use screen's height as default. For example: `--height 1080`, get default value by [nc-screen](https://github.com/avennn/nc-screen).
+-   `-H, --height <number>`
+    Set wallpaper's height. Not required.
 
-`--max`
+-   `-i, --interval <string>`
+    Interval between two fetching actions, with format `[digit][unit]`. For example, `1h` means fetching wallpaper per hour. Unit supports `s`(second), `m`(minute), `h`(hour), `d`(day). Default `1d`. Not suggest to set a very small value, otherwise leading problem.
 
--   set the maximum count of wallpapers keeping in local. For example: `--max 3`, default: `1`.
+-   `-m, --max <number>`
 
-`--interval`
+    Keep latest `max` wallpapers in the directory. Default `3`.
 
--   set the interval of fetching wallpaper, every 12 hours as default. For example: `--interval 6h`, default: `12h`.
+-   `-s, --startup`
 
-`--startup`
+    Auto start after your computer launched. Plan to support.
 
--   auto launch after your computer started up.
-
-`--no-startup`
-
--   not auto launch after your computer started up.
-
-`--history`
-
--   use last params as input.
-
-`--no-history`
-
--   not use last params as input.
+-   `--no-startup`
+    Not auto start after your computer launched. Plan to support.
 
 ## Issues and Contributing
 
-Welcome to publish an issue if you have any question, further more, you can contribute your code if you have good ideas.
+Please contact with me if you have any question. Welcome to comfirm an issue or contribute.
 
 ## Author
 
@@ -89,8 +78,3 @@ Welcome to publish an issue if you have any question, further more, you can cont
 ## License
 
 [MIT](./LICENSE)
-
-## problems
-
--   https://stackoverflow.com/questions/40317578/yarn-global-command-not-working
--   puppeteer is brittle, don't set low interval.

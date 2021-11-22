@@ -33,15 +33,21 @@ export function parsePs(pids: string[]): Promise<ParsePsResult[]> {
                 const rawRows = stdout.split('\n').filter(Boolean);
                 const rows: ParsePsResult[] = [];
                 rawRows.forEach((row) => {
-                    const [pid, upTime, cpuPercent, memoryPercent] = row.split(
-                        /\s+/
-                    );
-                    rows.push({
-                        pid,
-                        upTime,
-                        cpuPercent: parseFloat(cpuPercent) + '%',
-                        memoryPercent: parseFloat(memoryPercent) + '%',
-                    });
+                    row = row.trim();
+                    if (row) {
+                        const [
+                            pid,
+                            upTime,
+                            cpuPercent,
+                            memoryPercent,
+                        ] = row.split(/\s+/);
+                        rows.push({
+                            pid,
+                            upTime,
+                            cpuPercent: parseFloat(cpuPercent) + '%',
+                            memoryPercent: parseFloat(memoryPercent) + '%',
+                        });
+                    }
                 });
                 resolve(rows.filter((r) => pids.includes(r.pid)));
             }
@@ -80,17 +86,21 @@ function parseTop(pids: string[]): Promise<ParseTopResult[]> {
                 }
             }
             const colKeys: string[] = headerRow
+                .trim()
                 .split(/\s+/)
                 .map((item: string) => item.toLowerCase());
             const result: Record<string, string>[] = [];
             contentRows.forEach((row) => {
-                const cols = row.split(/\s+/);
-                const obj: Record<string, string> = {};
-                for (let j = 0; j < colKeys.length; j++) {
-                    const key = colKeys[j];
-                    obj[key] = cols[j];
+                row = row.trim();
+                if (row) {
+                    const cols = row.split(/\s+/);
+                    const obj: Record<string, string> = {};
+                    for (let j = 0; j < colKeys.length; j++) {
+                        const key = colKeys[j];
+                        obj[key] = cols[j];
+                    }
+                    result.push(obj);
                 }
-                result.push(obj);
             });
             resolve(
                 result
