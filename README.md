@@ -73,7 +73,7 @@ dwp list
 
 ## Issues and Contributing
 
-Please contact with me if you have any question. Welcome to comfirm an issue or contribute.
+Please contact with me if you have any question. Welcome to confirm an issue or contribute.
 
 ## Author
 
