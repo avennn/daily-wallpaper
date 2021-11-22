@@ -1,4 +1,4 @@
-<a href="README.md">English</a>｜<a href="README.zh_CN.md">简体中文</a>
+<a href="#">English</a>｜<a href="README.zh_CN.md">简体中文</a>
 
 # daily-wallpaper
 
@@ -58,7 +58,7 @@ dwp list
 
 -   `-i, --interval <string>`
 
-    两次抓取壁纸的间隔时间，格式是`[digit][unit]`。例如，`1h` 代表 1 小时获取一次. 单位支持`s`(秒), `m`(分), `h`(时), `d`(天).默认 1 天一次。不建议设置太小的值，否则很可能出现 bug。
+    两次抓取壁纸的间隔时间，格式是`[digit][unit]`。例如，`1h` 代表 1 小时获取一次. 单位支持`s`(秒), `m`(分), `h`(时), `d`(天)。默认 1 天一次。不建议设置太小的值，否则很可能出现 bug。
 
 -   `-m, --max <number>`
 
