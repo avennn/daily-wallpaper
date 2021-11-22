@@ -1,6 +1,6 @@
 {
     "name": "dwp",
-    "version": "2.4.2",
+    "version": "2.4.3",
     "description": "Auto fetch Bing's wallpaper at regular interval",
     "main": "./dist/index.js",
     "engines": {
