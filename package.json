@@ -1,6 +1,6 @@
 {
     "name": "dwp",
-    "version": "2.4.5",
+    "version": "2.4.6",
     "description": "Fetch Bing wallpapers regularly",
     "main": "./dist/index.js",
     "engines": {
