@@ -24,57 +24,44 @@ function parseIntervalArgv(value: string) {
 }
 
 export function createOptionArgs(
-    type: 'width' | 'height' | 'max' | 'interval' | 'startup' | 'no-startup',
-    isShort?: boolean
+    type: 'width' | 'height' | 'max' | 'interval' | 'startup' | 'no-startup'
 ) {
     switch (type) {
         case 'width':
-            return isShort
-                ? ['--width <number>']
-                : [
-                      '-W, --width <number>',
-                      "Set wallpaper's width. Not required. Can automatically acquire!",
-                      parseIntArgv,
-                  ];
+            return [
+                '-W, --width <number>',
+                "Set wallpaper's width. Not required. Can automatically acquire!",
+                parseIntArgv,
+            ];
         case 'height':
-            return isShort
-                ? ['--height <number>']
-                : [
-                      '-H, --height <number>',
-                      "Set wallpaper's height. Not required. Can automatically acquire!",
-                      parseIntArgv,
-                  ];
+            return [
+                '-H, --height <number>',
+                "Set wallpaper's height. Not required. Can automatically acquire!",
+                parseIntArgv,
+            ];
         case 'interval':
-            return isShort
-                ? ['--interval <string>']
-                : [
-                      '-i, --interval <string>',
-                      'Interval between two fetching actions, with format of [digit][unit], unit supports s(second),m(minute),h(hour),d(day)',
-                      parseIntervalArgv,
-                      defaultOptions.interval,
-                  ];
+            return [
+                '-i, --interval <string>',
+                'Interval between two fetching actions, with format of [digit][unit], unit supports s(second),m(minute),h(hour),d(day)',
+                parseIntervalArgv,
+                defaultOptions.interval,
+            ];
         case 'max':
-            return isShort
-                ? ['--max <number>']
-                : [
-                      '-m, --max <number>',
-                      'Keep latest [max] wallpapers in the dir',
-                      parseIntArgv,
-                  ];
+            return [
+                '-m, --max <number>',
+                'Keep latest [max] wallpapers in the dir',
+                parseIntArgv,
+            ];
         case 'startup':
-            return isShort
-                ? ['--startup']
-                : [
-                      '-s, --startup',
-                      'Whether auto start after your computer launched, default true',
-                  ];
+            return [
+                '-s, --startup',
+                'Whether auto start after your computer launched, default true',
+            ];
         case 'no-startup':
-            return isShort
-                ? ['--no-startup']
-                : [
-                      '--no-startup',
-                      'Not auto start after your computer launched, defaut false',
-                  ];
+            return [
+                '--no-startup',
+                'Not auto start after your computer launched, defaut false',
+            ];
         default:
             return [];
     }

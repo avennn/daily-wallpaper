@@ -191,7 +191,7 @@ export async function list() {
                 info.memory || 'unknown',
                 info.cpuPercent || 'unknown',
                 info.memoryPercent || 'unknown',
-                args[1],
+                args.slice(1).join('\n'),
             ]);
         });
         console.log(table.toString());

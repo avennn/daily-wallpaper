@@ -12,7 +12,7 @@ import { Command } from 'commander';
 // import { saveHistoryConfig } from './history';
 // import { setAutoStartup } from './plist';
 import { downloadPicture } from './picture';
-import { parseInterval, checkIfDebugMode } from './utils';
+import { parseInterval } from './utils';
 import { defaultOptions } from './config';
 import { createOptionArgs } from './command';
 import type { RawOptions, FinalOptions } from '../types';
@@ -33,13 +33,13 @@ function runLeadingSchedule(
     return scheduler;
 }
 
-function mergeOptions(options: RawOptions): FinalOptions {
+function mergeOptions(rawOptions: RawOptions): FinalOptions {
     const { width, height } = getInfo();
     const finalOptions = {
         width,
         height,
         ...defaultOptions,
-        ...options,
+        ...rawOptions,
     };
     if (typeof finalOptions.max !== 'number' || finalOptions.max === 0) {
         finalOptions.max = defaultOptions.max;
@@ -50,18 +50,19 @@ function mergeOptions(options: RawOptions): FinalOptions {
 export function run(): ToadScheduler {
     const program = new Command();
     program
-        .option(...(createOptionArgs('width', true) as [string]))
-        .option(...(createOptionArgs('height', true) as [string]))
-        .option(...(createOptionArgs('interval', true) as [string]))
-        .option(...(createOptionArgs('max', true) as [string]))
-        .option(...(createOptionArgs('startup', true) as [string]))
-        .option(...(createOptionArgs('no-startup', true) as [string]));
+        .option(...(createOptionArgs('width') as [string]))
+        .option(...(createOptionArgs('height') as [string]))
+        .option(...(createOptionArgs('interval') as [string]))
+        .option(...(createOptionArgs('max') as [string]))
+        .option(...(createOptionArgs('startup') as [string]))
+        .option(...(createOptionArgs('no-startup') as [string]));
     program.parse();
     const rawOptions = program.opts() as RawOptions;
     const options = mergeOptions(rawOptions);
-    logger.info('Options: ', JSON.stringify(options, null, 2));
-    const { width, height, max, startup, interval } = options;
 
+    logger.info('Options: ', JSON.stringify(options, null, 2));
+
+    const { width, height, max, startup, interval } = options;
     let inited = false;
 
     // saveHistoryConfig({ width, height, max, interval });
