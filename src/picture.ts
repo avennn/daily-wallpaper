@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import URL from 'url';
-import querystring from 'querystring';
+import { URL, URLSearchParams } from 'url';
 import puppeteer from 'puppeteer';
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -57,19 +56,25 @@ export async function getPictureInfo(): Promise<PictureInfoResult> {
         }
         const match = keyStr.match(/href="(.+?)"/);
         if (match) {
-            const picUrl = URL.resolve(website, match[1]);
-            const urlObj = URL.parse(picUrl);
-            // @ts-ignore
-            const query = querystring.parse(urlObj.query);
-            // @ts-ignore
-            const picMatch = query.id.match(/^(.+)\.(.+?)$/);
+            const urlObj = new URL(match[1], website);
+            const id = urlObj.searchParams.get('id') || '';
+            const picMatch = id.match(/^(.+)\.(.+?)$/);
             if (picMatch) {
-                logger.info('Picture url: ', picUrl);
+                const picName = id.replace(/\d*x\d*/, 'UHD');
+                const searchParams = new URLSearchParams({
+                    id: picName,
+                });
+                const newUrlObj = new URL(
+                    urlObj.pathname + '?' + searchParams.toString(),
+                    urlObj.origin
+                );
+                const picUrl = newUrlObj.toString();
+                logger.info('Picture base url: ', picUrl);
                 return {
                     success: true,
                     data: {
-                        url: picUrl, // example: https://cn.bing.com/th?id=OHR.FormentorHolidays_ZH-CN3392936755_UHD.jpg
-                        name: picMatch[1].replace(/\d*x\d*/, 'UHD'),
+                        url: newUrlObj.toString(), // example: https://cn.bing.com/th?id=OHR.FormentorHolidays_ZH-CN3392936755_UHD.jpg
+                        name: picName,
                         ext: picMatch[2],
                     },
                     errorMsg: '',
@@ -107,7 +112,7 @@ export async function downloadPicture(
             };
         }
         const { url, name, ext } = picResult.data!;
-        const params: any = {
+        const params: Record<string, unknown> = {
             rs: 1,
             c: 4,
         };
@@ -152,10 +157,14 @@ export async function downloadPicture(
             });
         }
         logger.info('Download success: ', dest);
+        const urlObj = new URL(url);
+        Object.keys(params).forEach((key) => {
+            urlObj.searchParams.set(key, String(params[key]));
+        });
         return {
             success: true,
             data: {
-                originalUrl: url,
+                originalUrl: urlObj.toString(),
                 destPath: dest,
             },
             errorMsg: '',
