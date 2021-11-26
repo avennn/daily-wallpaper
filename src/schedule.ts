@@ -13,7 +13,7 @@ import { Command } from 'commander';
 // import { setAutoStartup } from './plist';
 import { downloadPicture } from './picture';
 import { parseInterval } from './utils';
-import { defaultOptions } from './config';
+import { defaultStartOptions } from './config';
 import { createOptionArgs } from './command';
 import type { RawOptions, FinalOptions } from '../types';
 import logger from './logger';
@@ -38,11 +38,11 @@ function mergeOptions(rawOptions: RawOptions): FinalOptions {
     const finalOptions = {
         width,
         height,
-        ...defaultOptions,
+        ...defaultStartOptions,
         ...rawOptions,
     };
     if (typeof finalOptions.max !== 'number' || finalOptions.max === 0) {
-        finalOptions.max = defaultOptions.max;
+        finalOptions.max = defaultStartOptions.max;
     }
     return finalOptions;
 }

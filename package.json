@@ -1,6 +1,6 @@
 {
     "name": "dwp",
-    "version": "2.5.0",
+    "version": "2.6.0",
     "description": "Fetch Bing wallpapers regularly",
     "main": "./dist/index.js",
     "engines": {
@@ -17,7 +17,8 @@
         "help": "npm run build && node ./dist/index.js -h",
         "debug": "npm run build && node ./dist/index.js start -i 30m -m 2",
         "stop": "npm run build && node ./dist/index.js stop",
-        "showlist": "npm run build && node ./dist/index.js list"
+        "showlist": "npm run build && node ./dist/index.js list",
+        "log": "npm run build && node ./dist/index.js log -n 50"
     },
     "keywords": [
         "nodejs",

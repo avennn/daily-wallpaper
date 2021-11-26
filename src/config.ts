@@ -19,7 +19,12 @@ export const website = 'https://cn.bing.com/';
 
 export const picDir = getPictureDirectory();
 
+// log
 export const logDir = path.resolve(homeDir, './.dwp/logs');
+export const defaultLogFile = path.join(logDir, 'dwp.log');
+export const errorLogFile = path.join(logDir, 'dwp-error.log');
+export const defaultLogRowNum = 500;
+
 export const stdErrorLog = path.resolve(homeDir, './.dwp/logs/stderr.log');
 export const stdOutLog = path.resolve(homeDir, './.dwp/logs/stdout.log');
 
@@ -34,7 +39,7 @@ export const historyConfig = path.resolve(
     homeDir,
     './.dwp/history.config.json'
 );
-export const defaultOptions = {
+export const defaultStartOptions = {
     interval: '1d',
     max: 3,
     startup: true,

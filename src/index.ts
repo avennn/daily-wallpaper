@@ -6,7 +6,8 @@ import Table from 'cli-table3';
 import { RawOptions } from '../types/index';
 import logger, { echo } from './logger';
 import { checkIfDebugMode } from './utils';
-import { getProcessesInfo, ProcessInfo } from './shell';
+import { getProcessesInfo, tail, ProcessInfo } from './shell';
+import { defaultLogFile, errorLogFile, defaultLogRowNum } from './config';
 
 function findRunningTasks(): Promise<ps.Program[]> {
     return new Promise((resolve, reject) => {
@@ -56,7 +57,7 @@ async function killTasks(tasks: ps.Program[]): Promise<[null[], Error[]]> {
     return [successList, errList];
 }
 
-export async function start(rawOptions: RawOptions & { debug: boolean }) {
+export async function start(rawOptions: RawOptions) {
     try {
         const tasks = await findRunningTasks();
         if (tasks.length) {
@@ -197,5 +198,21 @@ export async function list() {
         console.log(table.toString());
     } catch (e) {
         logger.error('List schedule failed!', e);
+    }
+}
+
+interface LogCommandOptions {
+    num: number;
+    error: boolean;
+}
+
+export async function log(options: LogCommandOptions) {
+    try {
+        const { num, error } = options;
+        const logFile = error ? errorLogFile : defaultLogFile;
+        const result = await tail(num, logFile);
+        console.log(result);
+    } catch (e) {
+        echo.fail('Log failed!', e);
     }
 }

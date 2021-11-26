@@ -1,5 +1,5 @@
 import { SimpleIntervalSchedule } from 'toad-scheduler';
-import { defaultOptions } from './config';
+import { defaultStartOptions } from './config';
 
 const validIntervalRE = new RegExp(/^(\d+)(s|m|h|d)$/);
 
@@ -15,7 +15,7 @@ export function parseInterval(interval: string): SimpleIntervalSchedule {
     const matched = interval.match(validIntervalRE);
     const isValid = !!matched;
     if (!isValid) {
-        return parseInterval(defaultOptions.interval);
+        return parseInterval(defaultStartOptions.interval);
     }
     const unit = matched![2];
     const digit = Number(matched![1]);

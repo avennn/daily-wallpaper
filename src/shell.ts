@@ -144,3 +144,19 @@ export async function getProcessesInfo(pids: string[]): Promise<ProcessInfo[]> {
     });
     return result;
 }
+
+export function tail(n: number, file: string) {
+    return new Promise((resolve, reject) => {
+        n = Number(n);
+        if (isNaN(n) || !n) {
+            n = 500;
+        }
+        exec(`tail -${n} ${file}`, (error, stdout) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(stdout);
+            }
+        });
+    });
+}

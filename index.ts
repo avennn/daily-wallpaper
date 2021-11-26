@@ -5,7 +5,7 @@ import path from 'path';
 import { Command } from 'commander';
 import { safeJsonParse } from 'tori';
 import { createOptionArgs } from './src/command';
-import { start, stop, list } from './src/index';
+import { start, stop, list, log } from './src/index';
 
 try {
     const pkgJsonText = fs.readFileSync(
@@ -38,7 +38,6 @@ try {
         .option(...(createOptionArgs('max') as [string, string, () => number]))
         .option(...(createOptionArgs('startup') as [string, string]))
         .option(...(createOptionArgs('no-startup') as [string, string]))
-        .option('-d, --debug', 'debug')
         .action((options) => {
             start(options);
         });
@@ -53,6 +52,18 @@ try {
         .description('List all cron jobs in table.')
         .action(() => {
             list();
+        });
+    program
+        .command('log')
+        .description('Show logs.')
+        .option(
+            ...(createOptionArgs('log-num') as [string, string, () => number])
+        )
+        .option(
+            ...(createOptionArgs('log-error') as [string, string, () => number])
+        )
+        .action((options) => {
+            log(options);
         });
 
     program.parse();

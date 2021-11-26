@@ -1,6 +1,6 @@
 import { InvalidArgumentError } from 'commander';
 import chalk from 'chalk';
-import { defaultOptions } from './config';
+import { defaultStartOptions, defaultLogRowNum } from './config';
 import { isValidInterval } from './utils';
 
 function parseIntArgv(value: string) {
@@ -15,16 +15,24 @@ function parseIntervalArgv(value: string) {
     if (!isValidInterval(value)) {
         console.log(
             chalk.yellow(
-                `Warning: invalid interval argument, use default value "${defaultOptions.interval}"`
+                `Warning: invalid interval argument, use default value "${defaultStartOptions.interval}"`
             )
         );
-        return defaultOptions.interval;
+        return defaultStartOptions.interval;
     }
     return value;
 }
 
 export function createOptionArgs(
-    type: 'width' | 'height' | 'max' | 'interval' | 'startup' | 'no-startup'
+    type:
+        | 'width'
+        | 'height'
+        | 'max'
+        | 'interval'
+        | 'startup'
+        | 'no-startup'
+        | 'log-num'
+        | 'log-error'
 ) {
     switch (type) {
         case 'width':
@@ -44,7 +52,7 @@ export function createOptionArgs(
                 '-i, --interval <string>',
                 'Interval between two fetching actions, with format of [digit][unit], unit supports s(second),m(minute),h(hour),d(day)',
                 parseIntervalArgv,
-                defaultOptions.interval,
+                defaultStartOptions.interval,
             ];
         case 'max':
             return [
@@ -62,6 +70,15 @@ export function createOptionArgs(
                 '--no-startup',
                 'Not auto start after your computer launched, defaut false',
             ];
+        case 'log-num':
+            return [
+                '-n, --num <number>',
+                'Get how many rows text of the log file.',
+                parseIntArgv,
+                defaultLogRowNum,
+            ];
+        case 'log-error':
+            return ['-e, --error', 'Explicitly show error logs.'];
         default:
             return [];
     }

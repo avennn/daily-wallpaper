@@ -1,6 +1,5 @@
-import path from 'path';
 import log4js from 'log4js';
-import { logDir } from './config';
+import { defaultLogFile, errorLogFile } from './config';
 
 type EchoIconKey = 'success' | 'fail' | 'warn' | 'normal';
 const echoIcons: Record<EchoIconKey, string> = {
@@ -21,14 +20,21 @@ log4js.configure({
         console: { type: 'console' },
         app: {
             type: 'file',
-            filename: path.join(logDir, 'dwp.log'),
+            filename: defaultLogFile,
             maxLogSize: 5 * 1024 * 1024 /* 5MB */,
             backups: 5,
+        },
+        appError: {
+            type: 'file',
+            filename: errorLogFile,
+            maxLogSize: 5 * 1024 * 1024 /* 5MB */,
+            backups: 5,
+            level: 'error',
         },
     },
     categories: {
         default: { appenders: ['console'], level: 'debug' },
-        dwp: { appenders: ['app'], level: 'info' },
+        dwp: { appenders: ['app', 'appError'], level: 'info' },
     },
 });
 
