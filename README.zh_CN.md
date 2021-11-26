@@ -2,7 +2,7 @@
 
 # daily-wallpaper
 
-定时抓取必应壁纸
+一个定时抓取必应壁纸的 nodejs 命令行工具
 
 ## 安装
 

@@ -2,7 +2,7 @@
 
 # daily-wallpaper
 
-Fetch Bing wallpapers regularly
+A nodejs cli tool for fetching Bing wallpapers regularly
 
 ## Installation
 

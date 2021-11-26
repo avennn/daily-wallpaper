@@ -1,7 +1,7 @@
 {
     "name": "dwp",
     "version": "2.6.0",
-    "description": "Fetch Bing wallpapers regularly",
+    "description": "A nodejs cli tool for fetching Bing wallpapers regularly",
     "main": "./dist/index.js",
     "engines": {
         "node": ">=12.0.0",

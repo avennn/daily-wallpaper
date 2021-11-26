@@ -60,7 +60,7 @@ export async function getPictureInfo(): Promise<PictureInfoResult> {
             const id = urlObj.searchParams.get('id') || '';
             const picMatch = id.match(/^(.+)\.(.+?)$/);
             if (picMatch) {
-                const picName = id.replace(/\d*x\d*/, 'UHD');
+                const picName = id.replace(/(?<=_)(\d+x\d+)(?=\.)/, 'UHD');
                 const searchParams = new URLSearchParams({
                     id: picName,
                 });
