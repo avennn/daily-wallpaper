@@ -5,9 +5,9 @@ import ps from 'ps-node';
 import Table from 'cli-table3';
 import { RawOptions } from '../types/index';
 import logger, { echo } from './logger';
-import { checkIfDebugMode } from './utils';
+import { checkIfDebugMode, beautifyLog } from './utils';
 import { getProcessesInfo, tail, ProcessInfo } from './shell';
-import { defaultLogFile, errorLogFile, defaultLogRowNum } from './config';
+import { defaultLogFile, errorLogFile } from './config';
 
 function findRunningTasks(): Promise<ps.Program[]> {
     return new Promise((resolve, reject) => {
@@ -211,7 +211,7 @@ export async function log(options: LogCommandOptions) {
         const { num, error } = options;
         const logFile = error ? errorLogFile : defaultLogFile;
         const result = await tail(num, logFile);
-        console.log(result);
+        console.log(beautifyLog(result));
     } catch (e) {
         echo.fail('Log failed!', e);
     }

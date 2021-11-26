@@ -36,6 +36,12 @@ dwp stop
 dwp list
 ```
 
+展示日志
+
+```sh
+dwp log
+```
+
 ### 选项
 
 -   `-v, --version`
@@ -70,6 +76,16 @@ dwp list
 
 -   `--no-startup`
     电脑启动后不自动运行定时任务。计划支持。
+
+### `log`命令的选项
+
+-   `-n, --num <number>`
+
+    显示多少行日志。默认 `500`行。
+
+-   `-e, --error`
+
+    显示日志等级为`error`以上的日志。
 
 ## 问题和贡献
 

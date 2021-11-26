@@ -1,4 +1,5 @@
 import { SimpleIntervalSchedule } from 'toad-scheduler';
+import chalk from 'chalk';
 import { defaultStartOptions } from './config';
 
 const validIntervalRE = new RegExp(/^(\d+)(s|m|h|d)$/);
@@ -30,4 +31,14 @@ export function parseInterval(interval: string): SimpleIntervalSchedule {
 
 export function checkIfDebugMode() {
     return !__dirname.match(/dwp[\\/]dist/);
+}
+
+export function beautifyLog(output: string) {
+    return output
+        .replace(
+            /(?<=\[)(.+)(?=\]\s+\[(DEBUG|INFO|WARN|ERROR|FATAL)\])/g,
+            chalk.greenBright('$1')
+        )
+        .replace(/(\[INFO\])/g, chalk.blueBright('$1'))
+        .replace(/(\[ERROR\])/g, chalk.redBright('$1'));
 }

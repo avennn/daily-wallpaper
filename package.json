@@ -1,6 +1,6 @@
 {
     "name": "dwp",
-    "version": "2.6.0",
+    "version": "2.7.0",
     "description": "A nodejs cli tool for fetching Bing wallpapers regularly",
     "main": "./dist/index.js",
     "engines": {
@@ -18,7 +18,7 @@
         "debug": "npm run build && node ./dist/index.js start -i 30m -m 2",
         "stop": "npm run build && node ./dist/index.js stop",
         "showlist": "npm run build && node ./dist/index.js list",
-        "log": "npm run build && node ./dist/index.js log -n 50"
+        "log": "npm run build && node ./dist/index.js log -n 500"
     },
     "keywords": [
         "nodejs",

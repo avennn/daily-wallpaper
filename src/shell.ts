@@ -145,7 +145,7 @@ export async function getProcessesInfo(pids: string[]): Promise<ProcessInfo[]> {
     return result;
 }
 
-export function tail(n: number, file: string) {
+export function tail(n: number, file: string): Promise<string> {
     return new Promise((resolve, reject) => {
         n = Number(n);
         if (isNaN(n) || !n) {

@@ -36,6 +36,12 @@ Show cron jobs.
 dwp list
 ```
 
+Show logs.
+
+```sh
+dwp log
+```
+
 ### Options
 
 -   `-v, --version`
@@ -70,6 +76,16 @@ dwp list
 
 -   `--no-startup`
     Not auto start after your computer launched. Plan to support.
+
+### Options for `log` command
+
+-   `-n, --num <number>`
+
+    How many rows of log will be shown. Default `500`.
+
+-   `-e, --error`
+
+    Show logs with a log level upper than `error`.
 
 ## Issues and Contributing
 
