@@ -29,12 +29,16 @@ log4js.configure({
             filename: errorLogFile,
             maxLogSize: 5 * 1024 * 1024 /* 5MB */,
             backups: 5,
+        },
+        errorFilter: {
+            type: 'logLevelFilter',
+            appender: 'appError',
             level: 'error',
         },
     },
     categories: {
         default: { appenders: ['console'], level: 'debug' },
-        dwp: { appenders: ['app', 'appError'], level: 'info' },
+        dwp: { appenders: ['app', 'errorFilter'], level: 'info' },
     },
 });
 
