@@ -62,7 +62,7 @@ export async function start(rawOptions: RawOptions): Promise<void> {
         const tasks = await findRunningTasks();
         if (tasks.length) {
             echo.warn(
-                chalk.yellow('You already have running task. Will stop it!')
+                chalk.yellow('You already have running tasks. Will stop it!')
             );
             const [, errList] = await killTasks(tasks);
             if (errList.length) {
