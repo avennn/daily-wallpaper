@@ -33,7 +33,7 @@ export function createOptionArgs(
         | 'no-startup'
         | 'log-num'
         | 'log-error'
-) {
+): unknown[] {
     switch (type) {
         case 'width':
             return [

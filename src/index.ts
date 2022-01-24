@@ -57,7 +57,7 @@ async function killTasks(tasks: ps.Program[]): Promise<[null[], Error[]]> {
     return [successList, errList];
 }
 
-export async function start(rawOptions: RawOptions) {
+export async function start(rawOptions: RawOptions): Promise<void> {
     try {
         const tasks = await findRunningTasks();
         if (tasks.length) {
@@ -137,7 +137,7 @@ export async function start(rawOptions: RawOptions) {
     }
 }
 
-export async function stop() {
+export async function stop(): Promise<void> {
     try {
         const tasks = await findRunningTasks();
         const total = tasks.length;
@@ -165,13 +165,30 @@ export async function stop() {
     }
 }
 
-export async function list() {
+export async function list(): Promise<void> {
     try {
         const tasks = await findRunningTasks();
         const extraInfos = await getProcessesInfo(
             tasks.map((t) => String(t.pid))
         );
         const table = new Table({
+            chars: {
+                top: chalk.white('─'),
+                'top-mid': chalk.white('┬'),
+                'top-left': chalk.white('┌'),
+                'top-right': chalk.white('┐'),
+                bottom: chalk.white('─'),
+                'bottom-mid': chalk.white('┴'),
+                'bottom-left': chalk.white('└'),
+                'bottom-right': chalk.white('┘'),
+                left: chalk.white('│'),
+                'left-mid': chalk.white('├'),
+                mid: chalk.white('─'),
+                'mid-mid': chalk.white('┼'),
+                right: chalk.white('│'),
+                'right-mid': chalk.white('┤'),
+                middle: chalk.white('│'),
+            },
             head: [
                 chalk.cyan('PID'),
                 chalk.cyan('Uptime'),
@@ -206,7 +223,7 @@ interface LogCommandOptions {
     error: boolean;
 }
 
-export async function log(options: LogCommandOptions) {
+export async function log(options: LogCommandOptions): Promise<void> {
     try {
         const { num, error } = options;
         const logFile = error ? errorLogFile : defaultLogFile;
