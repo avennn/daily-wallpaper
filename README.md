@@ -2,6 +2,12 @@
 
 # daily-wallpaper
 
+[![Download](https://img.shields.io/npm/dw/dwp)](https://www.npmjs.com/package/dwp)
+[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/avennn/daily-wallpaper)
+[![Npm](https://img.shields.io/npm/v/dwp)](https://github.com/avennn/daily-wallpaper)
+[![Node](https://img.shields.io/node/v/dwp)](./package.json)
+[![License](https://img.shields.io/npm/l/dwp)](./LICENSE)
+
 A nodejs cli tool for fetching Bing wallpapers regularly
 
 ## Installation
