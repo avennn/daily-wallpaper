@@ -50,7 +50,7 @@
         "dayjs": "^1.8.23",
         "log4js": "^6.4.1",
         "nc-screen": "^1.4.0",
-        "plist": "^3.0.2",
+        "plist": "^3.0.5",
         "ps-node": "^0.1.6",
         "puppeteer": "^15.1.0",
         "toad-scheduler": "^1.5.0",
