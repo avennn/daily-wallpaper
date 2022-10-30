@@ -8,9 +8,9 @@ const echoIcons: Record<EchoIconKey, string> = {
   warn: '💡',
   normal: '\u2728',
 };
-export const echo = {} as Record<EchoIconKey, (...args: any[]) => void>;
+export const echo = {} as Record<EchoIconKey, (...args: unknown[]) => void>;
 (['success', 'fail', 'warn', 'normal'] as EchoIconKey[]).forEach((status) => {
-  echo[status] = function (...args: any[]) {
+  echo[status] = function (...args: unknown[]) {
     console.log(echoIcons[status], ...args);
   };
 });

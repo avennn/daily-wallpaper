@@ -80,13 +80,13 @@ export function run(): ToadScheduler {
     });
     if (!inited) {
       try {
-        process.send!(
+        process.send?.(
           success
             ? {
                 success,
                 options,
-                destPath: data!.destPath,
-                originalUrl: data!.originalUrl,
+                destPath: data?.destPath,
+                originalUrl: data?.originalUrl,
               }
             : {
                 success,

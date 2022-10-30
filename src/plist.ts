@@ -5,7 +5,7 @@ import { stdErrorLog, stdOutLog, macLaunchDir, plistLabel } from './config';
 import { createFileIfNotExist } from './file';
 import logger from './logger';
 
-export function savePList(auto: boolean = true) {
+export function savePList(auto = true): void {
   let cmdPath = process.env._;
   logger.log('process.env._: ', cmdPath);
   if (!cmdPath) {
@@ -27,11 +27,11 @@ export function savePList(auto: boolean = true) {
       EnvironmentVariables: {
         // TODO: 需要cdata包装吗
         // PATH: `<![CDATA[${process.env.PATH}]]>`,
-        PATH: process.env.PATH!,
+        PATH: process.env.PATH,
       },
       ProgramArguments: [
         // can't directly use 'dwp', cause permission error
-        cmdPath!,
+        cmdPath,
         // TODO: 有没有更好的写法
         path.resolve(__dirname, '../index.js'),
         'start',
@@ -39,6 +39,7 @@ export function savePList(auto: boolean = true) {
     };
     logger.log('\npath: ', process.env.PATH);
     logger.log('\ncmdPath: ', cmdPath);
+    // @ts-ignore
     const xml = plist.build(config);
     fs.writeFileSync(path.resolve(macLaunchDir, `./${plistLabel}`), xml);
   } catch (e) {
@@ -46,6 +47,6 @@ export function savePList(auto: boolean = true) {
   }
 }
 
-export function setAutoStartup(auto: boolean = true) {
+export function setAutoStartup(auto = true): void {
   return savePList(auto);
 }

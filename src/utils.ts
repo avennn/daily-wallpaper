@@ -4,7 +4,7 @@ import { defaultStartOptions } from './config';
 
 const validIntervalRE = new RegExp(/^(\d+)(s|m|h|d)$/);
 
-export function isValidInterval(interval: string) {
+export function isValidInterval(interval: string): boolean {
   return validIntervalRE.test(interval);
 }
 
@@ -18,8 +18,8 @@ export function parseInterval(interval: string): SimpleIntervalSchedule {
   if (!isValid) {
     return parseInterval(defaultStartOptions.interval);
   }
-  const unit = matched![2];
-  const digit = Number(matched![1]);
+  const unit = matched[2];
+  const digit = Number(matched[1]);
   const short2Long: Record<string, string> = {
     s: 'seconds',
     m: 'minutes',
@@ -29,11 +29,11 @@ export function parseInterval(interval: string): SimpleIntervalSchedule {
   return { [short2Long[unit]]: digit } as SimpleIntervalSchedule;
 }
 
-export function checkIfDebugMode() {
+export function checkIfDebugMode(): boolean {
   return !__dirname.match(/dwp[\\/]dist/);
 }
 
-export function beautifyLog(output: string) {
+export function beautifyLog(output: string): string {
   return output
     .replace(
       /(?<=\[)(.+)(?=\]\s+\[(DEBUG|INFO|WARN|ERROR|FATAL)\])/g,

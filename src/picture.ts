@@ -83,11 +83,12 @@ export async function getPictureInfo(): Promise<PictureInfoResult> {
       }
     }
     throw new Error('Not Match!');
-  } catch (e: any) {
+  } catch (e: unknown) {
     logger.error('Get picture url error:\n', e);
     return {
       success: false,
-      errorMsg: e.message,
+      // @ts-ignore
+      errorMsg: e?.message,
       errorStack: '',
     };
   }
@@ -104,14 +105,14 @@ export async function downloadPicture(
 ): Promise<DownloadPictureResult> {
   try {
     const picResult = await getPictureInfo();
-    if (!picResult.success) {
+    if (!picResult.success || !picResult.data) {
       return {
         success: false,
         errorMsg: picResult.errorMsg,
         errorStack: picResult.errorStack,
       };
     }
-    const { url, name, ext } = picResult.data!;
+    const { url, name, ext } = picResult.data;
     const params: Record<string, unknown> = {
       rs: 1,
       c: 4,
@@ -170,12 +171,14 @@ export async function downloadPicture(
       errorMsg: '',
       errorStack: '',
     };
-  } catch (e: any) {
+  } catch (e: unknown) {
     logger.error('Download fail: ', e);
     return {
       success: false,
-      errorMsg: e.message,
-      errorStack: e.stack,
+      // @ts-ignore
+      errorMsg: e?.message,
+      // @ts-ignore
+      errorStack: e?.stack,
     };
   }
 }

@@ -7,7 +7,7 @@ import logger from './logger';
 /**
  * file or directory exist
  */
-export function fsExistSync(fPath: string) {
+export function fsExistSync(fPath: string): boolean {
   try {
     fs.accessSync(fPath);
     return true;
@@ -16,7 +16,7 @@ export function fsExistSync(fPath: string) {
   }
 }
 
-export function createDirIfNotExist(dirPath: string) {
+export function createDirIfNotExist(dirPath: string): boolean {
   try {
     const dirExist = fsExistSync(dirPath);
     if (dirExist) {
@@ -33,7 +33,7 @@ export function createDirIfNotExist(dirPath: string) {
   }
 }
 
-export function createFileIfNotExist(fPath: string, data: string = '') {
+export function createFileIfNotExist(fPath: string, data = ''): boolean {
   try {
     const fileExist = fsExistSync(fPath);
     if (fileExist) {
@@ -58,7 +58,7 @@ export function createFileIfNotExist(fPath: string, data: string = '') {
 /**
  * get directory of a file
  */
-export function getFileDir(fPath: string) {
+export function getFileDir(fPath: string): string {
   const index = fPath.lastIndexOf('/');
   const dir = fPath.substring(0, index);
   return dir || '/';
