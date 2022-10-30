@@ -1,77 +1,77 @@
 {
-    "name": "dwp",
-    "version": "2.9.0",
-    "description": "A nodejs cli tool for fetching Bing wallpapers regularly",
-    "main": "./dist/index.js",
-    "engines": {
-        "node": ">=12.0.0",
-        "npm": ">=7.0.0"
-    },
-    "bin": {
-        "dwp": "./dist/index.js"
-    },
-    "scripts": {
-        "test": "jest",
-        "build": "rm -rf ./dist && tsc",
-        "prepublishOnly": "npm run build",
-        "help": "npm run build && node ./dist/index.js -h",
-        "debug": "npm run build && node ./dist/index.js start -i 30m -m 2",
-        "stop": "npm run build && node ./dist/index.js stop",
-        "showlist": "npm run build && node ./dist/index.js list",
-        "log": "npm run build && node ./dist/index.js log -n 500"
-    },
-    "keywords": [
-        "nodejs",
-        "wallpaper",
-        "crawler",
-        "cron",
-        "bing",
-        "daemon"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/avennn/daily-wallpaper.git"
-    },
-    "author": {
-        "name": "Javen Leung",
-        "email": "914301050@qq.com",
-        "url": "https://github.com/avennn"
-    },
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/avennn/daily-wallpaper/issues"
-    },
-    "homepage": "https://github.com/avennn/daily-wallpaper#readme",
-    "dependencies": {
-        "axios": "^0.27.2",
-        "chalk": "^4.1.2",
-        "cli-table3": "^0.6.0",
-        "commander": "^8.2.0",
-        "dayjs": "^1.8.23",
-        "log4js": "^6.4.1",
-        "nc-screen": "^1.4.0",
-        "plist": "^3.0.5",
-        "ps-node": "^0.1.6",
-        "puppeteer": "^15.1.0",
-        "toad-scheduler": "^1.5.0",
-        "tori": "^2.0.0"
-    },
-    "devDependencies": {
-        "@tsconfig/node12": "^1.0.7",
-        "@types/jest": "^28.1.3",
-        "@types/node": "^12.0.0",
-        "@types/plist": "^3.0.2",
-        "@types/ps-node": "^0.1.1",
-        "@types/puppeteer": "^5.4.6",
-        "@types/xml2js": "^0.4.8",
-        "@typescript-eslint/eslint-plugin": "^4.22.0",
-        "@typescript-eslint/parser": "^4.22.0",
-        "eslint": "^7.24.0",
-        "eslint-config-prettier": "^8.2.0",
-        "eslint-plugin-prettier": "^3.4.0",
-        "jest": "^28.1.1",
-        "prettier": "^2.2.1",
-        "ts-jest": "^28.0.5",
-        "typescript": "^4.4.4"
-    }
+  "name": "dwp",
+  "version": "2.9.0",
+  "description": "A nodejs cli tool for fetching Bing wallpapers regularly",
+  "main": "./dist/index.js",
+  "engines": {
+    "node": ">=12.0.0",
+    "npm": ">=7.0.0"
+  },
+  "bin": {
+    "dwp": "./dist/index.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "rm -rf ./dist && tsc",
+    "prepublishOnly": "npm run build",
+    "help": "npm run build && node ./dist/index.js -h",
+    "debug": "npm run build && node ./dist/index.js start -i 30m -m 2",
+    "stop": "npm run build && node ./dist/index.js stop",
+    "showlist": "npm run build && node ./dist/index.js list",
+    "log": "npm run build && node ./dist/index.js log -n 500"
+  },
+  "keywords": [
+    "nodejs",
+    "wallpaper",
+    "crawler",
+    "cron",
+    "bing",
+    "daemon"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avennn/daily-wallpaper.git"
+  },
+  "author": {
+    "name": "Javen Leung",
+    "email": "914301050@qq.com",
+    "url": "https://github.com/avennn"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/avennn/daily-wallpaper/issues"
+  },
+  "homepage": "https://github.com/avennn/daily-wallpaper#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "chalk": "^4.1.2",
+    "cli-table3": "^0.6.0",
+    "commander": "^8.2.0",
+    "dayjs": "^1.8.23",
+    "log4js": "^6.4.1",
+    "nc-screen": "^1.4.0",
+    "plist": "^3.0.5",
+    "ps-node": "^0.1.6",
+    "puppeteer": "^15.1.0",
+    "toad-scheduler": "^1.5.0",
+    "tori": "^2.0.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node12": "^1.0.7",
+    "@types/jest": "^28.1.3",
+    "@types/node": "^12.0.0",
+    "@types/plist": "^3.0.2",
+    "@types/ps-node": "^0.1.1",
+    "@types/puppeteer": "^5.4.6",
+    "@types/xml2js": "^0.4.8",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.24.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^28.1.1",
+    "prettier": "^2.2.1",
+    "ts-jest": "^28.0.5",
+    "typescript": "^4.4.4"
+  }
 }

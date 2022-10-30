@@ -50,48 +50,48 @@ dwp log
 
 ### Options
 
--   `-v, --version`
+- `-v, --version`
 
-    Show current version.
+  Show current version.
 
--   `-h, --help`
+- `-h, --help`
 
-    Show help info.
+  Show help info.
 
 ### Options for `start` command
 
--   `-W, --width <number>`
+- `-W, --width <number>`
 
-    Set wallpaper's width. Not required. `width` and `height` would be automatically acquired with [nc-screen](https://github.com/avennn/nc-screen).
+  Set wallpaper's width. Not required. `width` and `height` would be automatically acquired with [nc-screen](https://github.com/avennn/nc-screen).
 
--   `-H, --height <number>`
+- `-H, --height <number>`
 
-    Set wallpaper's height. Not required.
+  Set wallpaper's height. Not required.
 
--   `-i, --interval <string>`
+- `-i, --interval <string>`
 
-    Interval between two fetching actions, with format `[digit][unit]`. For example, `1h` means fetching wallpaper per hour. Unit supports `s`(second), `m`(minute), `h`(hour), `d`(day). Default `1d`. Not suggest to set a very small value, otherwise leading problem.
+  Interval between two fetching actions, with format `[digit][unit]`. For example, `1h` means fetching wallpaper per hour. Unit supports `s`(second), `m`(minute), `h`(hour), `d`(day). Default `1d`. Not suggest to set a very small value, otherwise leading problem.
 
--   `-m, --max <number>`
+- `-m, --max <number>`
 
-    Keep latest `max` wallpapers in the directory. Default `3`.
+  Keep latest `max` wallpapers in the directory. Default `3`.
 
--   `-s, --startup`
+- `-s, --startup`
 
-    Auto start after your computer launched. Plan to support.
+  Auto start after your computer launched. Plan to support.
 
--   `--no-startup`
-    Not auto start after your computer launched. Plan to support.
+- `--no-startup`
+  Not auto start after your computer launched. Plan to support.
 
 ### Options for `log` command
 
--   `-n, --num <number>`
+- `-n, --num <number>`
 
-    How many rows of log will be shown. Default `500`.
+  How many rows of log will be shown. Default `500`.
 
--   `-e, --error`
+- `-e, --error`
 
-    Show logs with a log level upper than `error`.
+  Show logs with a log level upper than `error`.
 
 ## Issues and Contributing
 

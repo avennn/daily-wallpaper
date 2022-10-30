@@ -5,12 +5,12 @@ const homeDir = os.homedir();
 const platform = os.platform();
 
 function getPictureDirectory() {
-    let dir = path.resolve(homeDir, './Pictures/dwp');
-    if (platform === 'win32') {
-        // windows
-        dir = path.resolve(homeDir, './Pictures/dwp');
-    }
-    return dir;
+  let dir = path.resolve(homeDir, './Pictures/dwp');
+  if (platform === 'win32') {
+    // windows
+    dir = path.resolve(homeDir, './Pictures/dwp');
+  }
+  return dir;
 }
 
 export const appName = 'daily-wallpaper';
@@ -32,15 +32,15 @@ export const macLaunchDir = path.resolve(homeDir, './Library/LaunchAgents');
 export const plistLabel = 'com.javenleung.dwp.plist';
 
 export const defaultConfig = path.resolve(
-    homeDir,
-    './.dwp/default.config.json'
+  homeDir,
+  './.dwp/default.config.json'
 );
 export const historyConfig = path.resolve(
-    homeDir,
-    './.dwp/history.config.json'
+  homeDir,
+  './.dwp/history.config.json'
 );
 export const defaultStartOptions = {
-    interval: '1d',
-    max: 3,
-    startup: true,
+  interval: '1d',
+  max: 3,
+  startup: true,
 };

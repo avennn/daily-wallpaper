@@ -50,48 +50,48 @@ dwp log
 
 ### 选项
 
--   `-v, --version`
+- `-v, --version`
 
-    显示当前版本
+  显示当前版本
 
--   `-h, --help`
+- `-h, --help`
 
-    显示帮助信息
+  显示帮助信息
 
 ### `start`命令的选项
 
--   `-W, --width <number>`
+- `-W, --width <number>`
 
-    设置壁纸的宽度。非必需。`width`和`height`会通过[nc-screen](https://github.com/avennn/nc-screen)自动获取。
+  设置壁纸的宽度。非必需。`width`和`height`会通过[nc-screen](https://github.com/avennn/nc-screen)自动获取。
 
--   `-H, --height <number>`
+- `-H, --height <number>`
 
-    设置壁纸的高度。非必需。
+  设置壁纸的高度。非必需。
 
--   `-i, --interval <string>`
+- `-i, --interval <string>`
 
-    两次抓取壁纸的间隔时间，格式是`[digit][unit]`。例如，`1h` 代表 1 小时获取一次. 单位支持`s`(秒), `m`(分), `h`(时), `d`(天)。默认 1 天一次。不建议设置太小的值，否则很可能出现 bug。
+  两次抓取壁纸的间隔时间，格式是`[digit][unit]`。例如，`1h` 代表 1 小时获取一次. 单位支持`s`(秒), `m`(分), `h`(时), `d`(天)。默认 1 天一次。不建议设置太小的值，否则很可能出现 bug。
 
--   `-m, --max <number>`
+- `-m, --max <number>`
 
-    最多保留最近`max`张壁纸在文件夹中。 默认 `3`。
+  最多保留最近`max`张壁纸在文件夹中。 默认 `3`。
 
--   `-s, --startup`
+- `-s, --startup`
 
-    电脑启动后自动运行定时任务。计划支持。
+  电脑启动后自动运行定时任务。计划支持。
 
--   `--no-startup`
-    电脑启动后不自动运行定时任务。计划支持。
+- `--no-startup`
+  电脑启动后不自动运行定时任务。计划支持。
 
 ### `log`命令的选项
 
--   `-n, --num <number>`
+- `-n, --num <number>`
 
-    显示多少行日志。默认 `500`行。
+  显示多少行日志。默认 `500`行。
 
--   `-e, --error`
+- `-e, --error`
 
-    显示日志等级为`error`以上的日志。
+  显示日志等级为`error`以上的日志。
 
 ## 问题和贡献
 

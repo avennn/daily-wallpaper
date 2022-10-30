@@ -5,7 +5,7 @@ import { defaultStartOptions } from './config';
 const validIntervalRE = new RegExp(/^(\d+)(s|m|h|d)$/);
 
 export function isValidInterval(interval: string) {
-    return validIntervalRE.test(interval);
+  return validIntervalRE.test(interval);
 }
 
 /**
@@ -13,32 +13,32 @@ export function isValidInterval(interval: string) {
  * @param interval
  */
 export function parseInterval(interval: string): SimpleIntervalSchedule {
-    const matched = interval.match(validIntervalRE);
-    const isValid = !!matched;
-    if (!isValid) {
-        return parseInterval(defaultStartOptions.interval);
-    }
-    const unit = matched![2];
-    const digit = Number(matched![1]);
-    const short2Long: Record<string, string> = {
-        s: 'seconds',
-        m: 'minutes',
-        h: 'hours',
-        d: 'days',
-    };
-    return { [short2Long[unit]]: digit } as SimpleIntervalSchedule;
+  const matched = interval.match(validIntervalRE);
+  const isValid = !!matched;
+  if (!isValid) {
+    return parseInterval(defaultStartOptions.interval);
+  }
+  const unit = matched![2];
+  const digit = Number(matched![1]);
+  const short2Long: Record<string, string> = {
+    s: 'seconds',
+    m: 'minutes',
+    h: 'hours',
+    d: 'days',
+  };
+  return { [short2Long[unit]]: digit } as SimpleIntervalSchedule;
 }
 
 export function checkIfDebugMode() {
-    return !__dirname.match(/dwp[\\/]dist/);
+  return !__dirname.match(/dwp[\\/]dist/);
 }
 
 export function beautifyLog(output: string) {
-    return output
-        .replace(
-            /(?<=\[)(.+)(?=\]\s+\[(DEBUG|INFO|WARN|ERROR|FATAL)\])/g,
-            chalk.greenBright('$1')
-        )
-        .replace(/(\[INFO\])/g, chalk.blueBright('$1'))
-        .replace(/(\[ERROR\])/g, chalk.redBright('$1'));
+  return output
+    .replace(
+      /(?<=\[)(.+)(?=\]\s+\[(DEBUG|INFO|WARN|ERROR|FATAL)\])/g,
+      chalk.greenBright('$1')
+    )
+    .replace(/(\[INFO\])/g, chalk.blueBright('$1'))
+    .replace(/(\[ERROR\])/g, chalk.redBright('$1'));
 }
