@@ -1,5 +1,4 @@
 import chalk from 'chalk';
-import cLogger from './cLogger';
 
 export default function printLogFile(log: string): void {
   const output = log
@@ -9,5 +8,5 @@ export default function printLogFile(log: string): void {
     )
     .replace(/(\[INFO\])/g, chalk.blueBright('$1'))
     .replace(/(\[ERROR\])/g, chalk.redBright('$1'));
-  cLogger.log(output);
+  console.log(output);
 }
