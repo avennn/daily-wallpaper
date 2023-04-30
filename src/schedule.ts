@@ -16,7 +16,7 @@ import { parseInterval } from './utils';
 import { defaultStartOptions } from './config';
 import { createOptionArgs } from './command';
 import type { RawOptions, FinalOptions } from '../types';
-import logger from './logger';
+import { logger } from './logger';
 
 function runLeadingSchedule(
   fn: () => void,

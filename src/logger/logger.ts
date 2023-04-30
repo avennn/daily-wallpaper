@@ -1,19 +1,8 @@
+/**
+ * 日志同时输出到控制台和文件
+ */
 import log4js from 'log4js';
-import { defaultLogFile, errorLogFile } from './config';
-
-type EchoIconKey = 'success' | 'fail' | 'warn' | 'normal';
-const echoIcons: Record<EchoIconKey, string> = {
-  success: '\u2705',
-  fail: '\u274c',
-  warn: '💡',
-  normal: '\u2728',
-};
-export const echo = {} as Record<EchoIconKey, (...args: unknown[]) => void>;
-(['success', 'fail', 'warn', 'normal'] as EchoIconKey[]).forEach((status) => {
-  echo[status] = function (...args: unknown[]) {
-    console.log(echoIcons[status], ...args);
-  };
-});
+import { defaultLogFile, errorLogFile } from '../config';
 
 log4js.configure({
   appenders: {

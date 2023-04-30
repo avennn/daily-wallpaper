@@ -3,7 +3,7 @@ import path from 'path';
 import plist from 'plist';
 import { stdErrorLog, stdOutLog, macLaunchDir, plistLabel } from './config';
 import { createFileIfNotExist } from './file';
-import logger from './logger';
+import { logger } from './logger';
 
 export function savePList(auto = true): void {
   let cmdPath = process.env._;

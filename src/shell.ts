@@ -1,6 +1,6 @@
 import { exec, spawn } from 'child_process';
 import { checkIfDebugMode } from './utils';
-import logger from './logger';
+import { logger } from './logger';
 
 interface ParsePsResult {
   pid: string;

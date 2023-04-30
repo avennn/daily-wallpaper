@@ -2,7 +2,7 @@
  * file operation
  */
 import fs from 'fs';
-import logger from './logger';
+import { logger } from './logger';
 
 /**
  * file or directory exist

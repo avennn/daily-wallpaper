@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 
 import { website, picDir } from './config';
 import { createDirIfNotExist } from './file';
-import logger from './logger';
+import { logger } from './logger';
 
 interface PictureInfo {
   url: string;
