@@ -27,7 +27,7 @@ export default async function start(rawOptions: RawOptions): Promise<void> {
     );
 
     const isDebug = checkIfDebugMode();
-    const startPath = path.join(__dirname, './schedule.js');
+    const startPath = path.join(__dirname, '../schedule.js');
 
     logger.info('isDebug: ', isDebug);
     logger.info('Schedule file path: ', startPath);
