@@ -1,29 +1,47 @@
 import ps from 'ps-node';
 import { checkIfDebugMode } from '../utils';
 import { logger } from '../logger';
+import Ps, { PsFormattedKey } from '../ps';
+
+interface Task {
+  pid: string;
+  command: string;
+  arguments: string[];
+}
 
 export function findRunningTasks(): Promise<ps.Program[]> {
-  return new Promise((resolve, reject) => {
-    ps.lookup({ command: 'node' }, (err, resultList) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      const isDebug = checkIfDebugMode();
-      const matchPath = `${
-        isDebug ? 'daily-wallpaper' : 'dwp'
-      }/dist/src/schedule.js`;
-      const runningTasks = resultList.filter((item) => {
-        if (item.arguments) {
-          const p = item.arguments[0];
-          if (~p.indexOf(matchPath)) {
+  // eslint-disable-next-line
+  return new Promise(async (resolve, reject) => {
+    const ps = new Ps();
+    ps.all()
+      .keys([
+        PsFormattedKey.pid,
+        PsFormattedKey.command,
+        PsFormattedKey.arguments,
+      ])
+      .execute()
+      .then((resultList) => {
+        const isDebug = checkIfDebugMode();
+        const matchPath = `${
+          isDebug ? 'daily-wallpaper' : 'dwp'
+        }/dist/src/schedule.js`;
+        const runningTasks = (resultList as Task[]).filter((item) => {
+          if (~item.command.indexOf(matchPath)) {
             return true;
           }
-        }
-        return false;
+          return false;
+        });
+        resolve(
+          runningTasks.map((item) => ({
+            command: item.command,
+            arguments: item.arguments,
+            pid: Number(item.pid),
+          }))
+        );
+      })
+      .catch((e) => {
+        reject(e);
       });
-      resolve(runningTasks);
-    });
   });
 }
 

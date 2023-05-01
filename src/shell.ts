@@ -1,4 +1,6 @@
 import { exec, spawn } from 'child_process';
+// @ts-ignore
+import tableParser from 'table-parser';
 import { checkIfDebugMode } from './utils';
 import { logger } from './logger';
 
@@ -151,6 +153,24 @@ export function tail(n: number, file: string): Promise<string> {
         reject(error);
       } else {
         resolve(stdout);
+      }
+    });
+  });
+}
+
+interface FindPsOption {
+  command?: string;
+}
+
+// 查找进程
+export function ps(opts: FindPsOption): Promise<void> {
+  return new Promise((resolve, reject) => {
+    exec('ps lx', (error, stdout) => {
+      if (error) {
+        reject(error);
+      } else {
+        const res = tableParser.parse(stdout);
+        resolve(res);
       }
     });
   });

@@ -1,34 +1,8 @@
 import chalk from 'chalk';
-import ps from 'ps-node';
 import Table from 'cli-table3';
 import { logger } from '../logger';
-import { checkIfDebugMode } from '../utils';
 import { getProcessesInfo, ProcessInfo } from '../shell';
-
-function findRunningTasks(): Promise<ps.Program[]> {
-  return new Promise((resolve, reject) => {
-    ps.lookup({ command: 'node' }, (err, resultList) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      const isDebug = checkIfDebugMode();
-      const matchPath = `${
-        isDebug ? 'daily-wallpaper' : 'dwp'
-      }/dist/src/schedule.js`;
-      const runningTasks = resultList.filter((item) => {
-        if (item.arguments) {
-          const p = item.arguments[0];
-          if (~p.indexOf(matchPath)) {
-            return true;
-          }
-        }
-        return false;
-      });
-      resolve(runningTasks);
-    });
-  });
-}
+import { findRunningTasks } from '../utils';
 
 export default async function list(): Promise<void> {
   try {
