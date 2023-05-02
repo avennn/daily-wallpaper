@@ -1,7 +1,7 @@
 import ps from 'ps-node';
 import { checkIfDebugMode } from '../utils';
 import { logger } from '../logger';
-import Ps, { PsFormattedKey } from '../ps';
+import { Ps } from 'bshell';
 
 interface Task {
   pid: string;
@@ -10,15 +10,10 @@ interface Task {
 }
 
 export function findRunningTasks(): Promise<ps.Program[]> {
-  // eslint-disable-next-line
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const ps = new Ps();
-    ps.all()
-      .keys([
-        PsFormattedKey.pid,
-        PsFormattedKey.command,
-        PsFormattedKey.arguments,
-      ])
+    ps.selectAll()
+      .output(['pid', 'command', 'arguments'])
       .execute()
       .then((resultList) => {
         const isDebug = checkIfDebugMode();
