@@ -14,4 +14,13 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-empty-function': 'off',
   },
+
+  overrides: [
+    {
+      files: ['scripts/*.js'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
+      },
+    },
+  ],
 };

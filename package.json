@@ -14,6 +14,7 @@
     "test": "jest",
     "build": "rm -rf ./dist && tsc",
     "prepublishOnly": "npm run test && npm run build",
+    "postpublish": "npm run ./scripts/postPublish.js",
     "help": "npm run build && node ./dist/index.js -h",
     "debug": "npm run build && node ./dist/index.js start -i 30m -m 2",
     "stop": "npm run build && node ./dist/index.js stop",
