@@ -55,6 +55,7 @@ export async function getPictureInfo(): Promise<PictureInfoResult> {
       throw new Error('Element not exist!');
     }
     const match = keyStr.match(/href="(.+?)"/);
+    // https://s.cn.bing.net/th?id=OHR.OdocoileusVirginianus_ZH-CN6941501455_1920x1080.webp&qlt=50
     if (match) {
       const urlObj = new URL(match[1], website);
       const id = urlObj.searchParams.get('id') || '';
@@ -73,9 +74,9 @@ export async function getPictureInfo(): Promise<PictureInfoResult> {
         return {
           success: true,
           data: {
-            url: newUrlObj.toString(), // example: https://cn.bing.com/th?id=OHR.FormentorHolidays_ZH-CN3392936755_UHD.jpg
+            url: picUrl, // example: https://cn.bing.com/th?id=OHR.FormentorHolidays_ZH-CN3392936755_UHD.jpg
             name: picName,
-            ext: picMatch[2],
+            ext: picMatch[2] === 'webp' ? 'jpg' : picMatch[2],
           },
           errorMsg: '',
           errorStack: '',
