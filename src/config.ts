@@ -4,41 +4,37 @@ import path from 'path';
 const homeDir = os.homedir();
 const platform = os.platform();
 
+export const appName = 'daily-wallpaper';
+const shortAppName = 'dwp';
+
 function getPictureDirectory() {
-  let dir = path.resolve(homeDir, './Pictures/dwp');
+  let dir = path.join(homeDir, `./Pictures/${shortAppName}`);
   if (platform === 'win32') {
-    // windows
-    dir = path.resolve(homeDir, './Pictures/dwp');
+    // TODO: windows
+    dir = path.join(homeDir, `./Pictures/${shortAppName}`);
   }
   return dir;
 }
-
-export const appName = 'daily-wallpaper';
 
 export const website = 'https://cn.bing.com/';
 
 export const picDir = getPictureDirectory();
 
 // log
-export const logDir = path.resolve(homeDir, './.dwp/logs');
-export const defaultLogFile = path.join(logDir, 'dwp.log');
+export const logDir = path.resolve(homeDir, `./.${shortAppName}/logs`);
+export const defaultLogFile = path.join(logDir, `${shortAppName}.log`);
 export const errorLogFile = path.join(logDir, 'dwp-error.log');
 export const defaultLogRowNum = 500;
 
-export const stdErrorLog = path.resolve(homeDir, './.dwp/logs/stderr.log');
-export const stdOutLog = path.resolve(homeDir, './.dwp/logs/stdout.log');
+export const stdErrorLog = path.join(homeDir, logDir, './stderr.log');
+export const stdOutLog = path.join(homeDir, logDir, './stdout.log');
 
-export const macLaunchDir = path.resolve(homeDir, './Library/LaunchAgents');
-export const plistLabel = 'com.javenleung.dwp.plist';
+export const macLaunchDir = path.join(homeDir, './Library/LaunchAgents');
+export const plistLabel = `com.javenleung.${shortAppName}.plist`;
 
-export const defaultConfig = path.resolve(
-  homeDir,
-  './.dwp/default.config.json'
-);
-export const historyConfig = path.resolve(
-  homeDir,
-  './.dwp/history.config.json'
-);
+export const defaultConfig = path.join(homeDir, './.dwp/default.config.json');
+export const historyConfig = path.join(homeDir, './.dwp/history.config.json');
+
 export const defaultStartOptions = {
   interval: '1d',
   max: 3,
