@@ -12,7 +12,7 @@ export function isValidInterval(interval: string): boolean {
  * @param interval
  */
 export function parseInterval(interval: string): SimpleIntervalSchedule {
-  const matched = interval.match(validIntervalRE);
+  const matched = interval.trim().match(validIntervalRE);
   const isValid = !!matched;
   if (!isValid) {
     return parseInterval(defaultStartOptions.interval);

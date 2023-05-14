@@ -9,7 +9,7 @@ import { website, picDir } from './config';
 import { createDirIfNotExist } from './file';
 import { logger } from './logger';
 
-interface PictureInfo {
+export interface PictureInfo {
   url: string;
   name: string;
   ext: string;
@@ -40,50 +40,60 @@ interface DownloadPictureResult extends BaseResult {
   data?: DownloadInfo;
 }
 
+/**
+ * @returns https://s.cn.bing.net/th?id=OHR.OdocoileusVirginianus_ZH-CN6941501455_1920x1080.webp&qlt=50
+ */
+export async function crawlPicture(): Promise<string> {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto(website, { waitUntil: 'networkidle0' });
+  const linkEle = await page.evaluate(
+    () => document.getElementById('preloadBg')?.outerHTML
+  );
+  await browser.close();
+  if (!linkEle || typeof linkEle !== 'string') {
+    throw new Error(`<link> for background image doesn't exist!`);
+  }
+  const matched = linkEle.match(/href="(.+?)"/);
+  if (matched) {
+    return matched[1];
+  }
+  return '';
+}
+
 // 获取当前时刻的图片信息
 export async function getPictureInfo(): Promise<PictureInfoResult> {
   try {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(website, { waitUntil: 'networkidle0' });
-    const keyStr = await page.evaluate(
-      // @ts-ignore
-      () => document.getElementById('preloadBg').outerHTML
-    );
-    await browser.close();
-    if (!keyStr || typeof keyStr !== 'string') {
-      throw new Error('Element not exist!');
-    }
-    const match = keyStr.match(/href="(.+?)"/);
-    // https://s.cn.bing.net/th?id=OHR.OdocoileusVirginianus_ZH-CN6941501455_1920x1080.webp&qlt=50
-    if (match) {
-      const urlObj = new URL(match[1], website);
+    const pictureUrl = await crawlPicture();
+    if (pictureUrl) {
+      const urlObj = new URL(pictureUrl);
       const id = urlObj.searchParams.get('id') || '';
-      const picMatch = id.match(/^(.+)\.(.+?)$/);
-      if (picMatch) {
-        const picName = id.replace(/(?<=_)(\d+x\d+)(?=\.)/, 'UHD');
-        const searchParams = new URLSearchParams({
-          id: picName,
-        });
-        const newUrlObj = new URL(
-          urlObj.pathname + '?' + searchParams.toString(),
-          urlObj.origin
-        );
-        const picUrl = newUrlObj.toString();
-        logger.info('Picture base url: ', picUrl);
-        return {
-          success: true,
-          data: {
-            url: picUrl, // example: https://cn.bing.com/th?id=OHR.FormentorHolidays_ZH-CN3392936755_UHD.jpg
-            name: picName,
-            ext: picMatch[2] === 'webp' ? 'jpg' : picMatch[2],
-          },
-          errorMsg: '',
-          errorStack: '',
-        };
-      }
+      const name = id
+        .replace(/(?<=_)(\d+x\d+)(?=\.)/, 'UHD')
+        .replace(/(?<=\.)(webp)$/, 'jpg');
+      const newSearchParams = new URLSearchParams({
+        id: name,
+      });
+      const newUrlObj = new URL(
+        urlObj.pathname + '?' + newSearchParams.toString(),
+        urlObj.origin
+      );
+      const picUrl = newUrlObj.toString();
+      const ext = name.substring(name.lastIndexOf('.') + 1);
+      logger.info('Picture base url: ', picUrl);
+      return {
+        success: true,
+        data: {
+          url: picUrl, // example: https://s.cn.bing.net/th?id=OHR.FormentorHolidays_ZH-CN3392936755_UHD.jpg
+          name, // with suffix such as .jpg,.png
+          ext,
+        },
+        errorMsg: '',
+        errorStack: '',
+      };
+    } else {
+      throw new Error('Not Match!');
     }
-    throw new Error('Not Match!');
   } catch (e: unknown) {
     logger.error('Get picture url error:\n', e);
     return {

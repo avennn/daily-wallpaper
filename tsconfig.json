@@ -3,7 +3,8 @@
   "compilerOptions": {
     "allowJs": true,
     "outDir": "dist",
-    "declaration": true
+    "declaration": true,
+    "lib": ["DOM"]
   },
   "include": ["src/**/*", "index.ts", "types/global.d.ts"],
   "exclude": ["node_modules", "__test__", "dist"]
