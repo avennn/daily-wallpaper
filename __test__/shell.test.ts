@@ -20,7 +20,6 @@ describe('shell', () => {
     const firstProcess = processList[0];
     expect(firstProcess).toHaveProperty('pid');
     expect(firstProcess).toHaveProperty('ppid');
-    console.log('===', firstProcess);
     // expect(firstProcess).toHaveProperty('upTime');
     // expect(firstProcess).toHaveProperty('memory');
     // expect(firstProcess).toHaveProperty('cpuPercent');

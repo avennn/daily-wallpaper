@@ -24,6 +24,5 @@ describe('dwp list: table style', () => {
       head: ['PID', 'Uptime', 'Memory', 'CPU%', 'Memory%', 'Options'],
     });
     table.push([1, 1, 1, 1, 1, 1]);
-    console.log(table.toString());
   });
 });
