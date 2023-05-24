@@ -19,7 +19,7 @@ npm install -g dwp
 或者
 
 ```sh
-yarn global dwp
+yarn global add dwp
 ```
 
 ## 用法

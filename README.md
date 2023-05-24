@@ -19,7 +19,7 @@ npm install -g dwp
 or
 
 ```sh
-yarn global dwp
+yarn global add dwp
 ```
 
 ## Usage
