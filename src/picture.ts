@@ -56,7 +56,9 @@ export async function crawlPicture(): Promise<string> {
   }
   const matched = linkEle.match(/href="(.+?)"/);
   if (matched) {
-    return matched[1];
+    return matched[1].startsWith('/')
+      ? `https://s.cn.bing.net${matched[1]}`
+      : matched[1];
   }
   return '';
 }
