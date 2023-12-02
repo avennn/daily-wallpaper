@@ -99,7 +99,7 @@ Please contact with me if you have any question. Welcome to confirm an issue or 
 
 ## Author
 
-[Javen Leung](https://github.com/avennn)
+[Thomas Leung](https://github.com/avennn)
 
 ## License
 
