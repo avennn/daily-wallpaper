@@ -2,9 +2,9 @@
 	"name": "dwp",
 	"version": "2.10.6",
 	"description": "A nodejs cli tool for fetching Bing wallpapers regularly",
-	"type": "module",
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
+	"type": "commonjs",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
 	"engines": {
 		"node": ">=20.0.0",
 		"npm": ">=10.0.0"
@@ -14,14 +14,14 @@
 	},
 	"scripts": {
 		"test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules\" jest",
-		"build": "rm -rf ./dist && tsc",
+		"build": "rimraf dist && tsup",
 		"prepublishOnly": "npm run test && npm run build",
 		"postpublish": "node ./scripts/postPublish.js",
-		"help": "npm run build && node ./dist/index.js -h",
-		"debug": "npm run build && node ./dist/index.js start -i 30m -m 2",
-		"stop": "npm run build && node ./dist/index.js stop",
-		"showlist": "npm run build && node ./dist/index.js list",
-		"log": "npm run build && node ./dist/index.js log -n 500",
+		"help": "npm run build && node ./dist/bin/cli.js -h",
+		"debug": "npm run build && node ./dist/bin/cli.js start -i 30m -m 2",
+		"stop": "npm run build && node ./dist/bin/cli.js stop",
+		"showlist": "npm run build && node ./dist/bin/cli.js list",
+		"log": "npm run build && node ./dist/bin/cli.js log --lines 100",
 		"lint": "biome check --write src/**/*.ts"
 	},
 	"keywords": ["nodejs", "wallpaper", "crawler", "cron", "bing", "daemon"],
@@ -70,6 +70,7 @@
 		"jest": "^29.7.0",
 		"ts-jest": "^29.1.2",
 		"ts-node": "^10.9.2",
+		"tsup": "^8.2.4",
 		"typescript": "^5.4.2"
 	},
 	"publishConfig": {

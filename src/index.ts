@@ -1,1 +1,1 @@
-export * from './commands';
+export { default as DailyWallpaper } from './client';
