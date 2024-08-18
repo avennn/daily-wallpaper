@@ -6,17 +6,17 @@
 type EchoIconKey = 'success' | 'fail' | 'warn' | 'normal';
 
 const echoIcons: Record<EchoIconKey, string> = {
-  success: '\u2705',
-  fail: '\u274c',
-  warn: '💡',
-  normal: '\u2728',
+	success: '\u2705',
+	fail: '\u274c',
+	warn: '💡',
+	normal: '\u2728',
 };
 
 const echo = {} as Record<EchoIconKey, (...args: unknown[]) => void>;
 (['success', 'fail', 'warn', 'normal'] as EchoIconKey[]).forEach((status) => {
-  echo[status] = function (...args: unknown[]) {
-    console.log(echoIcons[status], ...args);
-  };
+	echo[status] = (...args: unknown[]) => {
+		console.log(echoIcons[status], ...args);
+	};
 });
 
 export default echo;
