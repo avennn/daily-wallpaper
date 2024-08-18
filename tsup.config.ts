@@ -1,7 +1,7 @@
 import { defineConfig, type Options } from 'tsup';
 
 const baseOption: Options = {
-	format: 'cjs',
+	format: 'esm',
 	target: 'esnext',
 	platform: 'node',
 	shims: true,
