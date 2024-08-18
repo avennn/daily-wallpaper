@@ -3,7 +3,7 @@ import path from 'path';
 import chalk from 'chalk';
 import { RawOptions } from '../../types/index';
 import { checkIfDebugMode } from '../utils';
-import { logger, echoLogger as echo } from '../logger';
+import { logger, echoLogger as echo } from '@/logger';
 import { findRunningTasks, killTasks } from '../utils';
 
 export default async function start(rawOptions: RawOptions): Promise<void> {
