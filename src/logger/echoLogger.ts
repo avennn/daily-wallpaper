@@ -2,9 +2,6 @@
  * 以表情图开头，打印到控制台
  * 'success' | 'fail' | 'warn' | 'normal'
  */
-
-type EchoIconKey = 'success' | 'fail' | 'warn' | 'normal';
-
 const echoIcons: Record<EchoIconKey, string> = {
 	success: '\u2705',
 	fail: '\u274c',
@@ -13,10 +10,14 @@ const echoIcons: Record<EchoIconKey, string> = {
 };
 
 const echo = {} as Record<EchoIconKey, (...args: unknown[]) => void>;
-(['success', 'fail', 'warn', 'normal'] as EchoIconKey[]).forEach((status) => {
+const statusList = ['success', 'fail', 'warn', 'normal'] as const;
+
+type EchoIconKey = (typeof statusList)[number];
+
+for (const status of statusList) {
 	echo[status] = (...args: unknown[]) => {
 		console.log(echoIcons[status], ...args);
 	};
-});
+}
 
 export default echo;

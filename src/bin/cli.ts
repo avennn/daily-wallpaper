@@ -1,16 +1,19 @@
 #!/usr/bin/env node
 
-import { list, log, start, stop } from '@/commands';
-import { getAppVersion, parseArgv2Integer, parseArgv2Interval } from '@/utils';
 import { Command } from 'commander';
+import { getAppVersion, parseArgv2Integer, parseArgv2Interval } from '@/utils';
 import { DEFAULT_START_OPTIONS, DEFAULT_LOG_LINES_COUNT } from '@/config';
+import DailyWallpaper from '@/client';
 
 async function run() {
 	try {
 		const version = await getAppVersion();
+		const client = new DailyWallpaper();
 
 		const program = new Command();
+
 		program.version(version, '-v, --version');
+
 		program
 			.command('start')
 			.description('Start a cron job.')
@@ -33,19 +36,19 @@ async function run() {
 			.option('-m, --max <number>', 'Keep latest [max] wallpapers in the dir', parseArgv2Integer)
 			.option('-s, --startup', 'Whether auto start after your computer launched, default true')
 			.action((options) => {
-				start(options);
+				client.start(options);
 			});
 		program
 			.command('stop')
 			.description('Stop all cron jobs.')
 			.action(() => {
-				stop();
+				client.stop();
 			});
 		program
 			.command('list')
 			.description('List all cron jobs in table.')
 			.action(() => {
-				list();
+				client.list();
 			});
 		// https://pm2.keymetrics.io/docs/usage/log-management/
 		program
@@ -59,7 +62,7 @@ async function run() {
 			)
 			.option('--err', 'Only shows error output')
 			.action((options) => {
-				log(options);
+				client.log(options);
 			});
 
 		program.parse();

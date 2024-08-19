@@ -12,6 +12,6 @@
     "module": "ESNext",
     "moduleResolution": "Bundler"
   },
-  "include": ["src/**/*", "index.ts", "types/global.d.ts"],
+  "include": ["src/**/*", "index.ts", "src/types/global.d.ts"],
   "exclude": ["node_modules", "dist", "__test__", "scripts"]
 }
